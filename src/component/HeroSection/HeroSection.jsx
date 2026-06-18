@@ -235,6 +235,7 @@ export default function HeroSection() {
           flex-wrap
 
           mt-14
+          mb-6
         "
         >
 
