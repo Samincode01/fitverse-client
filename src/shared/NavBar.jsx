@@ -1,110 +1,386 @@
 "use client";
 
 import Link from "next/link";
-import { Button, Avatar } from "@heroui/react";
-import { GiMuscleUp } from "react-icons/gi";
-import { FiArrowUpRight } from "react-icons/fi";
+import { Menu, X } from "lucide-react";
+import { FaReact } from "react-icons/fa";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
-const user = null; // later replace with auth user
+export default function Navbar() {
+  const [open, setOpen] = useState(false);
 
-const navItems = [
-  {
-    label: "Home",
-    href: "/",
-  },
-  {
-    label: "All Classes",
-    href: "/classes",
-  },
-  {
-    label: "Community Forum",
-    href: "/forum",
-  },
-];
+  const pathname = usePathname();
 
-export default function NavBar() {
+  const user = true;
+
+  const navLinks = [
+    {
+      name: "Home",
+      path: "/",
+    },
+
+    {
+      name: "All Classes",
+      path: "/classes",
+    },
+
+    {
+      name: "Community Forum",
+      path: "/forum",
+    },
+  ];
+
   return (
-    <header className="fixed top-5 left-0 right-0 z-50">
-      <div className="max-w-7xl mx-auto px-5">
-        <div className="h-20 px-8 rounded-full border border-white/10 backdrop-blur-2xl bg-white/5 flex items-center justify-between">
+    <header className="w-full absolute top-0 left-0 z-50">
 
-          {/* logo */}
+      <nav
+        className="
+        w-full
+        h-20
 
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-lime-400 flex items-center justify-center">
-              <GiMuscleUp className="text-2xl text-black" />
-            </div>
+        px-6
+        md:px-12
 
-            <h1 className="text-3xl font-bold text-white">
-              FitVerse
-            </h1>
-          </Link>
+        flex
+        items-center
+        justify-between
 
-          {/* nav links */}
+        bg-black/20
+        backdrop-blur-xl
 
-          <div className="hidden lg:flex items-center gap-10">
+        border-b
+        border-white/10
+      "
+      >
 
-            {navItems.map((item) => (
+        {/* Logo */}
+
+        <Link href="/" className="flex items-center gap-3">
+
+          <div
+            className="
+            w-11
+            h-11
+
+            rounded-full
+
+            bg-[#D9FF3F]/10
+
+            border
+            border-[#D9FF3F]/30
+
+            flex
+            items-center
+            justify-center
+            "
+          >
+            <FaReact className="text-[#D9FF3F] text-2xl" />
+          </div>
+
+          <div>
+
+            <h2 className="text-white text-2xl font-bold">
+              Fitverse
+            </h2>
+
+            <p className="text-xs text-gray-400">
+              Smart Training
+            </p>
+
+          </div>
+
+        </Link>
+
+        {/* Desktop Nav */}
+
+        <ul className="hidden lg:flex items-center gap-10">
+
+          {navLinks.map((item) => (
+
+            <li key={item.name}>
+
               <Link
-                key={item.href}
-                href={item.href}
-                className="text-white font-semibold hover:text-lime-400 transition"
+                href={item.path}
+                className={`
+                relative
+                font-medium
+                transition
+                group
+
+                ${
+                  pathname === item.path
+                    ? "text-[#D9FF3F]"
+                    : "text-gray-300 hover:text-white"
+                }
+                `}
               >
-                {item.label}
+
+                {item.name}
+
+                <span
+                  className={`
+                  absolute
+
+                  -bottom-2
+                  left-0
+
+                  h-[2px]
+
+                  bg-[#D9FF3F]
+
+                  transition-all
+                  duration-300
+
+                  ${
+                    pathname === item.path
+                      ? "w-full"
+                      : "w-0 group-hover:w-full"
+                  }
+                  `}
+                />
+
               </Link>
+
+            </li>
+
+          ))}
+
+          {user && (
+
+            <li>
+
+              <Link
+                href="/dashboard"
+                className={`
+                relative
+                group
+                transition
+
+                ${
+                  pathname.startsWith("/dashboard")
+                    ? "text-[#D9FF3F]"
+                    : "text-gray-300 hover:text-white"
+                }
+                `}
+              >
+
+                Dashboard
+
+                <span
+                  className={`
+                  absolute
+
+                  -bottom-2
+                  left-0
+
+                  h-[2px]
+
+                  bg-[#D9FF3F]
+
+                  transition-all
+
+                  ${
+                    pathname.startsWith("/dashboard")
+                      ? "w-full"
+                      : "w-0 group-hover:w-full"
+                  }
+                  `}
+                />
+
+              </Link>
+
+            </li>
+
+          )}
+
+        </ul>
+
+        {/* Right Side */}
+
+        <div className="hidden lg:flex items-center gap-4">
+
+          {user ? (
+
+            <>
+
+              <div
+                className="
+                w-10
+                h-10
+
+                rounded-full
+
+                border
+
+                border-[#D9FF3F]/40
+
+                bg-white/5
+
+                flex
+                items-center
+                justify-center
+
+                text-white
+
+                font-semibold
+                "
+              >
+                U
+              </div>
+
+              <button
+                className="
+                px-6
+                py-3
+
+                rounded-full
+
+                bg-[#D9FF3F]
+
+                border
+                border-[#D9FF3F]
+
+                text-black
+
+                font-semibold
+
+                transition-all
+
+                duration-300
+
+                hover:bg-[#c6ea37]
+
+                hover:scale-105
+                "
+              >
+                Logout
+              </button>
+
+            </>
+
+          ) : (
+
+            <Link
+              href="/login"
+              className="
+              px-6
+              py-3
+
+              rounded-full
+
+              bg-[#D9FF3F]
+
+              border
+              border-[#D9FF3F]
+
+              text-black
+
+              font-semibold
+
+              transition-all
+
+              duration-300
+
+              hover:bg-[#c6ea37]
+
+              hover:scale-105
+              "
+            >
+              Login
+            </Link>
+
+          )}
+
+        </div>
+
+        {/* Mobile Button */}
+
+        <button
+          onClick={() => setOpen(!open)}
+          className="lg:hidden text-white"
+        >
+
+          {open ? <X /> : <Menu />}
+
+        </button>
+
+      </nav>
+
+      {/* Mobile Menu */}
+
+      {open && (
+
+        <div
+          className="
+          lg:hidden
+
+          bg-black/70
+
+          backdrop-blur-2xl
+
+          border-b
+
+          border-white/10
+
+          p-6
+          "
+        >
+
+          <div className="flex flex-col gap-6">
+
+            {navLinks.map((item) => (
+
+              <Link
+                key={item.name}
+                href={item.path}
+                className={
+                  pathname === item.path
+                    ? "text-[#D9FF3F] font-semibold"
+                    : "text-white"
+                }
+              >
+                {item.name}
+              </Link>
+
             ))}
 
             {user && (
+
               <Link
                 href="/dashboard"
-                className="text-white font-semibold hover:text-lime-400 transition"
+                className={
+                  pathname.startsWith("/dashboard")
+                    ? "text-[#D9FF3F] font-semibold"
+                    : "text-white"
+                }
               >
                 Dashboard
               </Link>
-            )}
-          </div>
 
-          {/* right */}
-
-          <div className="flex items-center gap-4">
-
-            {user ? (
-              <>
-                <Avatar src={user?.image} />
-
-                <Button
-                  radius="full"
-                  className="bg-lime-400 text-black font-bold"
-                >
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link href="/login">
-                  <Button
-                    variant="light"
-                    className="text-white"
-                  >
-                    Login
-                  </Button>
-                </Link>
-
-                <Link href="/register">
-                  <Button
-                    radius="full"
-                    className="bg-lime-400 text-black px-6 font-bold"
-                    endContent={<FiArrowUpRight />}
-                  >
-                    Get Started
-                  </Button>
-                </Link>
-              </>
             )}
 
+            <button
+              className="
+              bg-[#D9FF3F]
+
+              text-black
+
+              rounded-full
+
+              py-3
+
+              font-semibold
+              "
+            >
+              Logout
+            </button>
+
           </div>
+
         </div>
-      </div>
+
+      )}
+
     </header>
   );
 }
