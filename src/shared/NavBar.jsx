@@ -11,8 +11,6 @@ export default function Navbar() {
 
   const pathname = usePathname();
 
-  const user = true;
-
   const navLinks = [
     {
       name: "Home",
@@ -27,6 +25,11 @@ export default function Navbar() {
     {
       name: "Community Forum",
       path: "/forum",
+    },
+
+    {
+      name: "Dashboard",
+      path: "/dashboard",
     },
   ];
 
@@ -46,6 +49,7 @@ export default function Navbar() {
         justify-between
 
         bg-black/20
+
         backdrop-blur-xl
 
         border-b
@@ -67,6 +71,7 @@ export default function Navbar() {
             bg-[#D9FF3F]/10
 
             border
+
             border-[#D9FF3F]/30
 
             flex
@@ -103,8 +108,11 @@ export default function Navbar() {
                 href={item.path}
                 className={`
                 relative
+
                 font-medium
+
                 transition
+
                 group
 
                 ${
@@ -122,6 +130,7 @@ export default function Navbar() {
                   absolute
 
                   -bottom-2
+
                   left-0
 
                   h-[2px]
@@ -129,6 +138,7 @@ export default function Navbar() {
                   bg-[#D9FF3F]
 
                   transition-all
+
                   duration-300
 
                   ${
@@ -145,151 +155,38 @@ export default function Navbar() {
 
           ))}
 
-          {user && (
-
-            <li>
-
-              <Link
-                href="/dashboard"
-                className={`
-                relative
-                group
-                transition
-
-                ${
-                  pathname.startsWith("/dashboard")
-                    ? "text-[#D9FF3F]"
-                    : "text-gray-300 hover:text-white"
-                }
-                `}
-              >
-
-                Dashboard
-
-                <span
-                  className={`
-                  absolute
-
-                  -bottom-2
-                  left-0
-
-                  h-[2px]
-
-                  bg-[#D9FF3F]
-
-                  transition-all
-
-                  ${
-                    pathname.startsWith("/dashboard")
-                      ? "w-full"
-                      : "w-0 group-hover:w-full"
-                  }
-                  `}
-                />
-
-              </Link>
-
-            </li>
-
-          )}
-
         </ul>
 
-        {/* Right Side */}
+        {/* Login Button */}
 
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center">
 
-          {user ? (
+          <Link
+            href="/login"
+            className="
+            px-7
 
-            <>
+            py-3
 
-              <div
-                className="
-                w-10
-                h-10
+            rounded-full
 
-                rounded-full
+            bg-[#D9FF3F]
 
-                border
+            text-black
 
-                border-[#D9FF3F]/40
+            font-semibold
 
-                bg-white/5
+            transition-all
 
-                flex
-                items-center
-                justify-center
+            duration-300
 
-                text-white
+            hover:bg-[#c6ea37]
 
-                font-semibold
-                "
-              >
-                U
-              </div>
-
-              <button
-                className="
-                px-6
-                py-3
-
-                rounded-full
-
-                bg-[#D9FF3F]
-
-                border
-                border-[#D9FF3F]
-
-                text-black
-
-                font-semibold
-
-                transition-all
-
-                duration-300
-
-                hover:bg-[#c6ea37]
-
-                hover:scale-105
-                "
-              >
-                Logout
-              </button>
-
-            </>
-
-          ) : (
-
-            <Link
-              href="/login"
-              className="
-              px-6
-              py-3
-
-              rounded-full
-
-              bg-[#D9FF3F]
-
-              border
-              border-[#D9FF3F]
-
-              text-black
-
-              font-semibold
-
-              transition-all
-
-              duration-300
-
-              hover:bg-[#c6ea37]
-
-              hover:scale-105
-              "
-            >
-              Login
-            </Link>
-
-          )}
+            hover:scale-105
+            "
+          >
+            Login
+          </Link>
 
         </div>
 
@@ -333,6 +230,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.path}
+                onClick={() => setOpen(false)}
                 className={
                   pathname === item.path
                     ? "text-[#D9FF3F] font-semibold"
@@ -344,22 +242,9 @@ export default function Navbar() {
 
             ))}
 
-            {user && (
-
-              <Link
-                href="/dashboard"
-                className={
-                  pathname.startsWith("/dashboard")
-                    ? "text-[#D9FF3F] font-semibold"
-                    : "text-white"
-                }
-              >
-                Dashboard
-              </Link>
-
-            )}
-
-            <button
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
               className="
               bg-[#D9FF3F]
 
@@ -369,11 +254,13 @@ export default function Navbar() {
 
               py-3
 
+              text-center
+
               font-semibold
               "
             >
-              Logout
-            </button>
+              Login
+            </Link>
 
           </div>
 
