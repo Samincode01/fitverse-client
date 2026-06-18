@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { Mail, Lock, User, ArrowRight } from "lucide-react";
 import { FaReact, FaGoogle } from "react-icons/fa";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <section className="relative min-h-screen bg-[#030312] overflow-hidden flex items-center justify-center px-6 py-20">
 
@@ -19,15 +19,13 @@ export default function LoginPage() {
         }}
       />
 
-      {/* Dark Overlay */}
+      {/* Overlay */}
 
       <div className="absolute inset-0 bg-gradient-to-b from-[#030312]/70 via-[#030312]/85 to-[#030312]" />
 
       {/* Glow */}
 
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-[#D9FF3F]/20 blur-[130px]" />
-
-      {/* Login Card */}
 
       <motion.div
         initial={{ opacity: 0, y: 35 }}
@@ -47,16 +45,16 @@ export default function LoginPage() {
           </div>
 
           <h1 className="text-white text-4xl font-bold mt-6">
-            Welcome Back
+            Create Account
           </h1>
 
           <p className="text-gray-400 text-center mt-3">
-            Login to continue your fitness journey with Fitverse.
+            Start your fitness journey with Fitverse today.
           </p>
 
         </div>
 
-        {/* Google Login */}
+        {/* Google Button */}
 
         <button
           className="
@@ -122,6 +120,28 @@ export default function LoginPage() {
 
         <form className="space-y-6">
 
+          {/* Name */}
+
+          <div>
+
+            <label className="text-gray-300 mb-3 block">
+              Full Name
+            </label>
+
+            <div className="flex items-center gap-3 px-5 h-14 rounded-2xl border border-white/10 bg-white/[0.03] focus-within:border-[#D9FF3F]">
+
+              <User className="text-[#D9FF3F]" size={20} />
+
+              <input
+                type="text"
+                placeholder="Enter your name"
+                className="flex-1 bg-transparent outline-none text-white placeholder:text-gray-500"
+              />
+
+            </div>
+
+          </div>
+
           {/* Email */}
 
           <div>
@@ -158,7 +178,7 @@ export default function LoginPage() {
 
               <input
                 type="password"
-                placeholder="Enter your password"
+                placeholder="Create password"
                 className="flex-1 bg-transparent outline-none text-white placeholder:text-gray-500"
               />
 
@@ -166,28 +186,7 @@ export default function LoginPage() {
 
           </div>
 
-          {/* Remember */}
-
-          <div className="flex justify-between items-center">
-
-            <label className="flex items-center gap-2 text-gray-400 text-sm cursor-pointer">
-
-              <input type="checkbox" />
-
-              Remember me
-
-            </label>
-
-            <Link
-              href="/forgot-password"
-              className="text-[#D9FF3F] text-sm hover:underline"
-            >
-              Forgot Password?
-            </Link>
-
-          </div>
-
-          {/* Login Button */}
+          {/* Submit */}
 
           <button
             className="
@@ -217,15 +216,15 @@ export default function LoginPage() {
 
             duration-300
 
+            hover:bg-[#c6ea37]
+
             hover:scale-[1.02]
 
-            hover:bg-[#c8ee38]
-
             cursor-pointer
-          "
+            "
           >
 
-            Login
+            Create Account
 
             <ArrowRight size={20} />
 
@@ -237,13 +236,13 @@ export default function LoginPage() {
 
         <p className="text-center text-gray-400 mt-8">
 
-          Don't have an account?
+          Already have an account?
 
           <Link
-            href="/register"
+            href="/login"
             className="text-[#D9FF3F] ml-2 font-semibold hover:underline"
           >
-            Create Account
+            Login
           </Link>
 
         </p>
