@@ -20,6 +20,7 @@ export default async function ClassesPage() {
       <div className="max-w-7xl mx-auto">
 
         <div className="text-center mb-16">
+
           <h1 className="text-5xl font-bold text-white">
             Explore Our
             <span className="text-[#D9FF3F]"> Fitness Classes</span>
@@ -29,14 +30,18 @@ export default async function ClassesPage() {
             Discover expert-led training programs designed
             to help you achieve your goals.
           </p>
+
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
           {classes?.length > 0 ? (
+
             classes.map((item) => (
+
               <ClassCard
                 key={item._id}
+                id={item._id}
                 image={item.image}
                 title={item.title}
                 category={item.category}
@@ -45,9 +50,13 @@ export default async function ClassesPage() {
                 students={item.students}
                 description={item.description}
               />
+
             ))
+
           ) : (
+
             <div className="col-span-full text-center py-24">
+
               <h2 className="text-4xl font-bold text-white">
                 No Classes Available
               </h2>
@@ -55,7 +64,9 @@ export default async function ClassesPage() {
               <p className="text-gray-400 mt-4 text-lg">
                 New fitness classes will be added soon.
               </p>
+
             </div>
+
           )}
 
         </div>

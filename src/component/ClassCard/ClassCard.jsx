@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Users } from "lucide-react";
 
 export default function ClassCard({
+  id,
   image,
   title,
   category,
-  level,
+ level,
   price,
   students,
   description,
@@ -30,13 +31,9 @@ export default function ClassCard({
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
 
-        {/* Category */}
-
         <div className="absolute top-5 left-5 px-4 py-2 rounded-full bg-pink-500/20 text-pink-300 text-sm font-semibold">
           {category}
         </div>
-
-        {/* Price */}
 
         <div className="absolute top-5 right-5 w-14 h-14 rounded-full bg-[#D9FF3F] text-black font-bold flex items-center justify-center">
           ${price}
@@ -56,8 +53,6 @@ export default function ClassCard({
           By Trainer
         </p>
 
-        {/* Meta */}
-
         <div className="flex items-center gap-5 mt-6">
 
           <span className="px-4 py-2 rounded-full bg-[#D9FF3F]/15 text-[#D9FF3F] text-sm font-semibold">
@@ -74,13 +69,9 @@ export default function ClassCard({
 
         </div>
 
-        {/* Description */}
-
         <p className="text-gray-400 mt-7 leading-8">
           {description}
         </p>
-
-        {/* Footer */}
 
         <div className="border-t border-white/10 mt-8 pt-8 flex items-center justify-between">
 
@@ -97,7 +88,7 @@ export default function ClassCard({
           </div>
 
           <Link
-            href="/classes"
+            href={`/classes/${id}`}
             className="px-8 py-4 rounded-2xl border border-[#D9FF3F]/30 text-[#D9FF3F] font-semibold transition-all duration-300 hover:bg-[#D9FF3F] hover:text-black"
           >
             View Details
