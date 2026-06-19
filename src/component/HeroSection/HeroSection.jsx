@@ -26,7 +26,6 @@ const fadeUp = {
 export default function HeroSection() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#030312] pt-[160px]">
-
       {/* Background Image */}
 
       <div
@@ -59,7 +58,6 @@ export default function HeroSection() {
       {/* Content */}
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
-
         {/* Badge */}
 
         <motion.div
@@ -69,25 +67,7 @@ export default function HeroSection() {
           custom={0.1}
           className="flex justify-center mb-10"
         >
-          <div
-            className="
-            inline-flex
-            items-center
-            gap-2
-
-            px-6 py-3
-
-            rounded-full
-
-            border border-white/10
-
-            bg-white/[0.06]
-
-            backdrop-blur-2xl
-
-            shadow-[0_8px_30px_rgba(0,0,0,.3)]
-          "
-          >
+          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 bg-white/[0.06] backdrop-blur-2xl shadow-[0_8px_30px_rgba(0,0,0,.3)]">
             <motion.div
               animate={{
                 scale: [1, 1.3, 1],
@@ -114,19 +94,7 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           custom={0.2}
-          className="
-          text-center
-
-          font-bold
-
-          text-white
-
-          text-5xl
-          md:text-7xl
-          lg:text-[78px]
-
-          leading-[1.05]
-        "
+          className="text-center font-bold text-white text-5xl md:text-7xl lg:text-[78px] leading-[1.05]"
         >
           Where Fitness Passion
 
@@ -134,9 +102,7 @@ export default function HeroSection() {
 
           Discipline And
 
-          <span className="text-[#D9FF3F]">
-            {" "}Results Come Together
-          </span>
+          <span className="text-[#D9FF3F]"> Results Come Together</span>
 
           <br />
 
@@ -150,27 +116,10 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           custom={0.3}
-          className="
-          max-w-3xl
-
-          mx-auto
-
-          text-center
-
-          text-gray-300
-
-          text-lg
-
-          md:text-xl
-
-          mt-8
-
-          leading-relaxed
-        "
+          className="max-w-3xl mx-auto text-center text-gray-300 text-lg md:text-xl mt-8 leading-relaxed"
         >
-          Build strength, stay motivated and train smarter with
-          expert-led programs designed to transform your fitness
-          journey.
+          Build strength, stay motivated and train smarter with expert-led
+          programs designed to transform your fitness journey.
         </motion.p>
 
         {/* Features */}
@@ -180,41 +129,25 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           custom={0.4}
-          className="
-          flex
-
-          flex-wrap
-
-          justify-center
-
-          gap-10
-
-          mt-12
-        "
+          className="flex flex-wrap justify-center gap-10 mt-12"
         >
           {[
             "Stronger Every Day",
             "Transform Your Body",
             "Train Hard. Stay Fit.",
           ].map((item) => (
-
             <div
               key={item}
               className="flex items-center gap-3 text-white"
             >
-
               <div className="relative">
-
                 <div className="w-4 h-4 rounded-full border-2 border-[#D9FF3F]" />
 
                 <div className="absolute top-1 left-1 w-2 h-2 rounded-full bg-[#D9FF3F]" />
-
               </div>
 
               <span>{item}</span>
-
             </div>
-
           ))}
         </motion.div>
 
@@ -225,109 +158,34 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           custom={0.5}
-          className="
-          flex
-
-          justify-center
-
-          gap-6
-
-          flex-wrap
-
-          mt-14
-          mb-6
-        "
+          className="flex justify-center gap-6 flex-wrap mt-14 mb-6"
         >
-
           {/* Explore Button */}
 
-          <button
-            className="
-            group
-
-            px-10 py-5
-
-            rounded-full
-
-            bg-[#D9FF3F]
-
-            text-black
-
-            font-semibold
-
-            transition-all
-
-            duration-300
-
-            hover:scale-105
-
-            hover:shadow-[0_0_45px_rgba(217,255,63,.45)]
-          "
-          >
-
+          <button className="group px-10 py-5 rounded-full bg-[#D9FF3F] text-black font-semibold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_45px_rgba(217,255,63,.45)]">
             <span className="flex items-center gap-3">
-
               Explore Classes
 
               <ArrowUpRight
                 size={20}
-                className="
-                transition-all
-
-                duration-300
-
-                group-hover:translate-x-1
-
-                group-hover:-translate-y-1
-              "
+                className="transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
               />
-
             </span>
-
           </button>
 
           {/* Watch Video */}
 
           <button className="group flex items-center gap-4">
-
-            <div
-              className="
-              w-14 h-14
-
-              rounded-full
-
-              bg-[#D9FF3F]
-
-              text-black
-
-              flex
-
-              items-center
-
-              justify-center
-
-              shadow-[0_0_35px_rgba(217,255,63,.35)]
-
-              transition-all
-
-              duration-300
-
-              group-hover:scale-110
-            "
-            >
+            <div className="w-14 h-14 rounded-full bg-[#D9FF3F] text-black flex items-center justify-center shadow-[0_0_35px_rgba(217,255,63,.35)] transition-all duration-300 group-hover:scale-110">
               <FaPlay />
             </div>
 
             <span className="text-white text-xl font-semibold">
               Watch Video
             </span>
-
           </button>
-
         </motion.div>
-
       </div>
-
     </section>
   );
 }

@@ -82,25 +82,7 @@ export default function ProcessSection() {
           className="flex justify-center"
         >
 
-          <div
-            className="
-            inline-flex
-            items-center
-            gap-3
-
-            px-5
-            py-2
-
-            rounded-full
-
-            border
-            border-white/10
-
-            bg-white/[0.04]
-
-            backdrop-blur-xl
-          "
-          >
+          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-xl">
 
             <div className="w-2 h-2 rounded-full bg-[#D9FF3F] animate-pulse" />
 
@@ -119,25 +101,7 @@ export default function ProcessSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: .8 }}
-          className="
-          text-center
-
-          text-white
-
-          font-bold
-
-          text-5xl
-
-          md:text-6xl
-
-          leading-tight
-
-          max-w-4xl
-
-          mx-auto
-
-          mt-8
-        "
+          className="text-center text-white font-bold text-5xl md:text-6xl leading-tight max-w-4xl mx-auto mt-8"
         >
           The Training Process Behind
 
@@ -159,93 +123,21 @@ export default function ProcessSection() {
 
               <motion.div
                 key={item.step}
-
                 custom={i}
-
                 variants={fadeUp}
-
                 initial="hidden"
-
                 whileInView="visible"
-
                 viewport={{ once: true }}
-
-                className="
-                group
-
-                relative
-
-                p-12
-
-                rounded-[30px]
-
-                border
-
-                border-white/10
-
-                bg-white/[0.03]
-
-                backdrop-blur-xl
-
-                overflow-hidden
-
-                transition-all
-
-                duration-500
-
-                hover:border-[#D9FF3F]/30
-
-                hover:-translate-y-2
-              "
+                className="group relative p-12 rounded-[30px] border border-white/10 bg-white/[0.03] backdrop-blur-xl overflow-hidden transition-all duration-500 hover:border-[#D9FF3F]/30 hover:-translate-y-2"
               >
 
                 {/* Hover Glow */}
 
-                <div
-                  className="
-                  absolute
-
-                  inset-0
-
-                  opacity-0
-
-                  group-hover:opacity-100
-
-                  transition-all
-
-                  duration-500
-
-                  bg-[radial-gradient(circle_at_top,#D9FF3F20,transparent_70%)]
-                "
-                />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-[radial-gradient(circle_at_top,#D9FF3F20,transparent_70%)]" />
 
                 {/* Icon */}
 
-                <div
-                  className="
-                  relative
-
-                  z-10
-
-                  w-16
-
-                  h-16
-
-                  rounded-full
-
-                  bg-[#D9FF3F]
-
-                  flex
-
-                  items-center
-
-                  justify-center
-
-                  text-black
-
-                  mx-auto
-                "
-                >
+                <div className="relative z-10 w-16 h-16 rounded-full bg-[#D9FF3F] flex items-center justify-center text-black mx-auto">
 
                   <Icon size={30} />
 
@@ -255,25 +147,7 @@ export default function ProcessSection() {
 
                 <div className="flex justify-center mt-8">
 
-                  <span
-                    className="
-                    px-5
-
-                    py-2
-
-                    rounded-full
-
-                    border
-
-                    border-white/10
-
-                    bg-white/[0.03]
-
-                    text-gray-300
-
-                    text-sm
-                  "
-                  >
+                  <span className="px-5 py-2 rounded-full border border-white/10 bg-white/[0.03] text-gray-300 text-sm">
                     {item.step}
                   </span>
 
@@ -281,37 +155,13 @@ export default function ProcessSection() {
 
                 {/* Title */}
 
-                <h3
-                  className="
-                  text-white
-
-                  text-3xl
-
-                  font-bold
-
-                  text-center
-
-                  mt-16
-                "
-                >
+                <h3 className="text-white text-3xl font-bold text-center mt-16">
                   {item.title}
                 </h3>
 
                 {/* Description */}
 
-                <p
-                  className="
-                  text-gray-400
-
-                  text-center
-
-                  leading-relaxed
-
-                  mt-6
-
-                  text-lg
-                "
-                >
+                <p className="text-gray-400 text-center leading-relaxed mt-6 text-lg">
                   {item.description}
                 </p>
 
