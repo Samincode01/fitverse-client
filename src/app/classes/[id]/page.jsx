@@ -3,7 +3,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Users, Heart, ArrowLeft } from "lucide-react";
-
+import AddToFavouriteButton from "@/component/AddToFavouriteButton";
 import { auth } from "@/lib/auth";
 
 async function getClass(id) {
@@ -212,13 +212,7 @@ export default async function ClassDetails({ params }) {
 
               </button>
 
-              <button className="px-10 py-5 rounded-full border border-[#D9FF3F]/30 text-[#D9FF3F] flex items-center gap-3 hover:bg-[#D9FF3F] hover:text-black transition-all duration-300 cursor-pointer">
-
-                <Heart size={22} />
-
-                Add To Favourite
-
-              </button>
+             <AddToFavouriteButton classId={data._id} />
 
             </div>
 

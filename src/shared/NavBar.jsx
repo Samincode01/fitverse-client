@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, LayoutDashboard, LogOut, ChevronDown } from "lucide-react";
+import { Menu, X, LayoutDashboard, LogOut, ChevronDown, Heart, } from "lucide-react";
 import { FaReact } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
+
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -198,16 +199,20 @@ export default function Navbar() {
 
                     </div>
 
-                    <Link
-                      href={dashboardLink}
-                      className="flex items-center gap-3 px-5 py-4 text-white hover:bg-white/5 transition"
-                    >
+                 {user?.role === "user" && (
 
-                      <LayoutDashboard size={18} />
+  <Link
+    href="/dashboard/user/favourites"
+    className="flex items-center gap-3 px-5 py-4 text-white hover:bg-white/5 transition"
+  >
 
-                      Dashboard
+    <Heart size={18} className="text-[#D9FF3F]" />
 
-                    </Link>
+    My Favourite Classes
+
+  </Link>
+
+)}
 
                     <button
                       onClick={handleLogout}
