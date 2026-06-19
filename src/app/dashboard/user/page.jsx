@@ -1,6 +1,6 @@
 export default function UserDashboard() {
   return (
-    <div>
+    <div className="pt-28">
 
       <h1 className="text-5xl text-white font-bold">
         User Dashboard
