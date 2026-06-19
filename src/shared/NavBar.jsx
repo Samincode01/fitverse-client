@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, LayoutDashboard, LogOut, ChevronDown, Heart, } from "lucide-react";
+import { Menu, X, LayoutDashboard, LogOut, ChevronDown, Heart, UserCircle2,} from "lucide-react";
 import { FaReact } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
-
+import Image from "next/image";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -151,37 +151,54 @@ export default function Navbar() {
 
               <div className="relative" ref={dropdownRef}>
 
-                <button
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-3"
-                >
+               <button
+  onClick={() => setProfileOpen(!profileOpen)}
+  className="flex items-center gap-3 cursor-pointer"
+>
 
-                  <img
-                    src={user.image || "/avatar.png"}
-                    alt={user.name}
-                    className="w-11 h-11 rounded-full object-cover border-2 border-[#D9FF3F]"
-                  />
+  {user?.image ? (
 
-                  <div className="text-left">
+    <Image
+      src={user.image}
+      alt={user.name}
+      width={44}
+      height={44}
+      className="w-11 h-11 rounded-full object-cover border-2 border-[#D9FF3F]"
+    />
 
-                    <h3 className="text-white font-semibold">
-                      {user.name}
-                    </h3>
+  ) : (
 
-                    <p className="text-xs text-gray-400 capitalize">
-                      {user.role}
-                    </p>
+    <div className="w-11 h-11 rounded-full border-2 border-[#D9FF3F] bg-[#D9FF3F]/10 flex items-center justify-center">
 
-                  </div>
+      <UserCircle2
+        size={28}
+        className="text-[#D9FF3F]"
+      />
 
-                  <ChevronDown
-                    size={18}
-                    className={`text-white transition ${
-                      profileOpen ? "rotate-180" : ""
-                    }`}
-                  />
+    </div>
 
-                </button>
+  )}
+
+  <div className="text-left">
+
+    <h3 className="text-white font-semibold">
+      {user.name}
+    </h3>
+
+    <p className="text-xs text-gray-400 capitalize">
+      {user.role}
+    </p>
+
+  </div>
+
+  <ChevronDown
+    size={18}
+    className={`text-white transition ${
+      profileOpen ? "rotate-180" : ""
+    } cursor-pointer`}
+  />
+
+</button>
 
                 {profileOpen && (
 

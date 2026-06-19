@@ -46,6 +46,13 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoogleSignin = async() =>
+{
+  const data = await authClient.signIn.social({
+    provider: "google",
+  });
+};
+
   return (
     <section className="relative min-h-screen bg-[#030312] overflow-hidden flex items-center justify-center px-6 py-20">
 
@@ -98,7 +105,7 @@ export default function LoginPage() {
 
         {/* Google Login */}
 
-        <button className="mt-8 w-full h-14 rounded-2xl border border-white/10 bg-white/[0.04] text-white flex items-center justify-center gap-4 transition-all duration-300 hover:border-[#D9FF3F] hover:bg-white/[0.08] hover:scale-[1.02] cursor-pointer">
+        <button onClick={handleGoogleSignin} className="mt-8 w-full h-14 rounded-2xl border border-white/10 bg-white/[0.04] text-white flex items-center justify-center gap-4 transition-all duration-300 hover:border-[#D9FF3F] hover:bg-white/[0.08] hover:scale-[1.02] cursor-pointer">
 
           <FaGoogle className="text-[#D9FF3F] text-xl" />
 
