@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { Users, Heart, ArrowLeft } from "lucide-react";
+
+import { auth } from "@/lib/auth";
 
 async function getClass(id) {
   try {
@@ -24,6 +28,28 @@ async function getClass(id) {
 }
 
 export default async function ClassDetails({ params }) {
+
+  // CHECK SESSION
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  // IF NOT LOGGED IN
+
+  if (!session) {
+
+    redirect("/login?message=login-required");
+
+  }
+
+  // ONLY USER CAN ACCESS
+
+  if (session.user.role !== "user") {
+
+    redirect("/");
+
+  }
 
   const { id } = await params;
 
