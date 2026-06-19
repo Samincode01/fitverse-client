@@ -1,11 +1,51 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import { FaReact, FaGoogle } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const { error } = await authClient.signIn.email({
+        email,
+        password,
+        rememberMe,
+      });
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.success("Login successful!");
+
+      router.push("/");
+    } catch (err) {
+      console.error(err);
+
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="relative min-h-screen bg-[#030312] overflow-hidden flex items-center justify-center px-6 py-20">
 
@@ -58,45 +98,7 @@ export default function LoginPage() {
 
         {/* Google Login */}
 
-        <button
-          className="
-          mt-8
-
-          w-full
-
-          h-14
-
-          rounded-2xl
-
-          border
-
-          border-white/10
-
-          bg-white/[0.04]
-
-          text-white
-
-          flex
-
-          items-center
-
-          justify-center
-
-          gap-4
-
-          transition-all
-
-          duration-300
-
-          hover:border-[#D9FF3F]
-
-          hover:bg-white/[0.08]
-
-          hover:scale-[1.02]
-
-          cursor-pointer
-          "
-        >
+        <button className="mt-8 w-full h-14 rounded-2xl border border-white/10 bg-white/[0.04] text-white flex items-center justify-center gap-4 transition-all duration-300 hover:border-[#D9FF3F] hover:bg-white/[0.08] hover:scale-[1.02] cursor-pointer">
 
           <FaGoogle className="text-[#D9FF3F] text-xl" />
 
@@ -120,7 +122,7 @@ export default function LoginPage() {
 
         {/* Form */}
 
-        <form className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-6">
 
           {/* Email */}
 
@@ -136,7 +138,10 @@ export default function LoginPage() {
 
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
+                required
                 className="flex-1 bg-transparent outline-none text-white placeholder:text-gray-500"
               />
 
@@ -158,7 +163,10 @@ export default function LoginPage() {
 
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
+                required
                 className="flex-1 bg-transparent outline-none text-white placeholder:text-gray-500"
               />
 
@@ -172,7 +180,11 @@ export default function LoginPage() {
 
             <label className="flex items-center gap-2 text-gray-400 text-sm cursor-pointer">
 
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
 
               Remember me
 
@@ -190,42 +202,12 @@ export default function LoginPage() {
           {/* Login Button */}
 
           <button
-            className="
-            w-full
-
-            h-14
-
-            rounded-full
-
-            bg-[#D9FF3F]
-
-            text-black
-
-            font-bold
-
-            text-lg
-
-            flex
-
-            items-center
-
-            justify-center
-
-            gap-3
-
-            transition-all
-
-            duration-300
-
-            hover:scale-[1.02]
-
-            hover:bg-[#c8ee38]
-
-            cursor-pointer
-          "
+            type="submit"
+            disabled={loading}
+            className="w-full h-14 rounded-full bg-[#D9FF3F] text-black font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 hover:scale-[1.02] hover:bg-[#c8ee38] disabled:opacity-70 cursor-pointer"
           >
 
-            Login
+            {loading ? "Logging in..." : "Login"}
 
             <ArrowRight size={20} />
 
