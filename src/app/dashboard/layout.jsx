@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import { UserCircle2 } from "lucide-react";
 import {
   LayoutDashboard,
   Users,
@@ -239,11 +241,19 @@ export default function DashboardLayout({ children }) {
 
         <div className="flex flex-col items-center border-b border-white/10 pb-8">
 
-          <img
-            src={user?.image}
-            alt={user?.name}
-            className="w-24 h-24 rounded-full object-cover border-4 border-[#D9FF3F]"
-          />
+          {user?.image ? (
+  <Image
+    src={user.image}
+    alt={user.name}
+    width={96}
+    height={96}
+    className="w-24 h-24 rounded-full object-cover border-4 border-[#D9FF3F]"
+  />
+) : (
+  <div className="w-24 h-24 rounded-full border-4 border-[#D9FF3F] bg-[#D9FF3F]/10 flex items-center justify-center">
+    <UserCircle2 size={60} className="text-[#D9FF3F]" />
+  </div>
+)}
 
           <h2 className="text-white text-xl font-bold mt-4">
 
