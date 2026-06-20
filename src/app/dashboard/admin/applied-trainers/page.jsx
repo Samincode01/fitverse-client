@@ -15,6 +15,7 @@ export default function AppliedTrainers() {
 
   const [feedback, setFeedback] = useState("");
 
+  const [selectedTrainer, setSelectedTrainer] = useState(null);
   useEffect(() => {
 
     fetch("http://localhost:5000/trainer-applications")
@@ -36,52 +37,28 @@ export default function AppliedTrainers() {
 
   }, []);
 
-  const handleApprove = async (id) => {
+ const handleApprove = async (id) => {
 
-    const res = await fetch(
-
-      `http://localhost:5000/trainer-applications/approve/${id}`,
-
-      {
-
-        method: "PATCH",
-
-      }
-
-    );
-
-    const data = await res.json();
-
-    if (data.modifiedCount > 0) {
-
-      toast.success("Trainer Approved");
-
-      setApplications(
-
-        applications.map((item) =>
-
-          item._id === id
-
-            ? {
-
-                ...item,
-
-                status: "approved",
-
-                feedback: "",
-
-              }
-
-            : item
-
-        )
-
-      );
-
+  await fetch(
+    `http://localhost:5000/trainer-applications/approve/${id}`,
+    {
+      method: "PATCH",
     }
+  );
 
-  };
+  setApplications((prev) =>
+    prev.map((item) =>
+      item._id === id
+        ? {
+            ...item,
+            status: "approved",
+            feedback: "",
+          }
+        : item
+    )
+  );
 
+};
   const handleReject = async () => {
 
     if (!feedback.trim()) {
@@ -323,19 +300,30 @@ export default function AppliedTrainers() {
 
                     <div className="flex justify-center gap-3">
 
-                      <button
+                      <div className="flex justify-center gap-3">
 
-                        onClick={() =>
-                          handleApprove(app._id)
-                        }
+  <button
+    onClick={() => setSelectedTrainer(app)}
+    className="px-5 py-2 rounded-xl bg-[#D9FF3F]/15 text-[#D9FF3F] font-semibold cursor-pointer"
+  >
+    View
+  </button>
 
-                        className="px-5 py-2 rounded-xl bg-green-500/15 text-green-400 font-semibold cursor-pointer"
+  <button
+    onClick={() => handleApprove(app._id)}
+    className="px-5 py-2 rounded-xl bg-green-500/15 text-green-400 font-semibold cursor-pointer"
+  >
+    Approve
+  </button>
 
-                      >
+  <button
+    onClick={() => setSelectedId(app._id)}
+    className="px-5 py-2 rounded-xl bg-red-500/15 text-red-400 font-semibold cursor-pointer"
+  >
+    Reject
+  </button>
 
-                        Approve
-
-                      </button>
+</div>
 
                       <button
 
@@ -440,7 +428,157 @@ export default function AppliedTrainers() {
         </div>
 
       )}
+{selectedTrainer && (
 
+<div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+  <div className="w-[550px] bg-[#0A0A18] border border-white/10 rounded-[30px] p-8">
+
+    <div className="flex justify-between items-center mb-8">
+
+      <h2 className="text-3xl font-bold text-white">
+
+        Trainer Details
+
+      </h2>
+
+      <button
+        onClick={() => setSelectedTrainer(null)}
+        className="text-gray-400 hover:text-white text-2xl cursor-pointer"
+      >
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <div className="flex items-center gap-6 mb-8">
+
+      {selectedTrainer.image ? (
+
+        <Image
+          src={selectedTrainer.image}
+          alt={selectedTrainer.name}
+          width={90}
+          height={90}
+          className="rounded-full border-4 border-[#D9FF3F]"
+        />
+
+      ) : (
+
+        <div className="w-[90px] h-[90px] rounded-full border-4 border-[#D9FF3F] bg-[#D9FF3F]/10 flex items-center justify-center">
+
+          <UserCircle2
+            size={55}
+            className="text-[#D9FF3F]"
+          />
+
+        </div>
+
+      )}
+
+      <div>
+
+        <h3 className="text-2xl font-bold text-white">
+
+          {selectedTrainer.name}
+
+        </h3>
+
+        <p className="text-gray-400">
+
+          {selectedTrainer.email}
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <div className="space-y-4">
+
+      <div className="bg-[#111122] rounded-2xl p-5">
+
+        <p className="text-gray-400 text-sm">
+
+          Experience
+
+        </p>
+
+        <h3 className="text-white text-xl font-semibold">
+
+          {selectedTrainer.experience} Years
+
+        </h3>
+
+      </div>
+
+      <div className="bg-[#111122] rounded-2xl p-5">
+
+        <p className="text-gray-400 text-sm">
+
+          Specialty
+
+        </p>
+
+        <h3 className="text-white text-xl font-semibold">
+
+          {selectedTrainer.specialty}
+
+        </h3>
+
+      </div>
+
+      <div className="bg-[#111122] rounded-2xl p-5">
+
+        <p className="text-gray-400 text-sm">
+
+          Status
+
+        </p>
+
+        <h3 className={`font-bold capitalize ${
+          selectedTrainer.status === "approved"
+            ? "text-green-400"
+            : selectedTrainer.status === "rejected"
+            ? "text-red-400"
+            : "text-yellow-400"
+        }`}>
+
+          {selectedTrainer.status}
+
+        </h3>
+
+      </div>
+
+      {selectedTrainer.feedback && (
+
+        <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-5">
+
+          <p className="text-red-300 font-semibold mb-2">
+
+            Admin Feedback
+
+          </p>
+
+          <p className="text-gray-300">
+
+            {selectedTrainer.feedback}
+
+          </p>
+
+        </div>
+
+      )}
+
+    </div>
+
+  </div>
+
+</div>
+
+)}
     </div>
 
   );
