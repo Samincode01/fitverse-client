@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 
-import ForumActions from "@/component/ForumActions";
+import ForumActions from "@/component/ForumActions/ForumActions";
 import CommentSection from "@/component/CommentSection/CommentSection";
 
 async function getForum(id) {
@@ -29,9 +29,7 @@ async function getForum(id) {
 
     return await res.json();
 
-  } catch (error) {
-
-    console.log(error);
+  } catch {
 
     return null;
 
@@ -45,6 +43,8 @@ export default async function ForumDetails({
 
 }) {
 
+  // Get logged in user
+
   const session = await auth.api.getSession({
 
     headers: await headers(),
@@ -56,6 +56,8 @@ export default async function ForumDetails({
     redirect("/login");
 
   }
+
+  const user = session.user || session.data?.user;
 
   const { id } = await params;
 
@@ -69,13 +71,13 @@ export default async function ForumDetails({
 
         <div className="text-center">
 
-          <h1 className="text-5xl font-bold text-white">
+          <h1 className="text-white text-5xl font-bold">
 
             Post Not Found
 
           </h1>
 
-          <p className="text-gray-400 mt-5">
+          <p className="text-gray-400 mt-4">
 
             This forum post does not exist.
 
@@ -91,11 +93,11 @@ export default async function ForumDetails({
 
   return (
 
-    <section className="min-h-screen bg-[#030312] pt-36 pb-24 px-6">
+    <section className="min-h-screen bg-[#030312] pt-32 pb-24 px-6">
 
       <div className="max-w-5xl mx-auto">
 
-        {/* Cover Image */}
+        {/* Cover */}
 
         <div className="overflow-hidden rounded-[35px] border border-white/10">
 
@@ -111,59 +113,59 @@ export default async function ForumDetails({
 
         </div>
 
-        {/* Content */}
+        {/* Author */}
 
-        <div className="mt-12">
+        <div className="mt-10 flex items-center gap-5">
 
-          <div className="flex items-center gap-4">
+          {forum.authorImage && (
 
-            {forum.authorImage && (
+            <img
 
-              <img
+              src={forum.authorImage}
 
-                src={forum.authorImage}
+              alt={forum.author}
 
-                alt={forum.author}
+              className="w-16 h-16 rounded-full border-2 border-[#D9FF3F]"
 
-                className="w-14 h-14 rounded-full border-2 border-[#D9FF3F]"
+            />
 
-              />
+          )}
 
-            )}
+          <div>
 
-            <div>
+            <p className="text-[#D9FF3F] font-semibold text-lg">
 
-              <p className="text-[#D9FF3F] font-semibold">
+              {forum.author}
 
-                {forum.author}
+            </p>
 
-              </p>
+            <p className="text-gray-400 capitalize">
 
-              <p className="text-gray-400 text-sm">
+              {forum.role}
 
-                {forum.role}
-
-              </p>
-
-            </div>
+            </p>
 
           </div>
 
-          <h1 className="text-6xl font-bold text-white mt-8 leading-tight">
-
-            {forum.title}
-
-          </h1>
-
-          <p className="text-gray-300 text-lg leading-10 mt-10">
-
-            {forum.description}
-
-          </p>
-
         </div>
 
-        {/* Likes / Dislikes */}
+        {/* Title */}
+
+        <h1 className="text-5xl md:text-6xl font-bold text-white mt-8 leading-tight">
+
+          {forum.title}
+
+        </h1>
+
+        {/* Description */}
+
+        <p className="text-gray-300 text-lg leading-10 mt-10">
+
+          {forum.description}
+
+        </p>
+
+        {/* Like / Dislike */}
 
         <ForumActions
 
@@ -173,7 +175,7 @@ export default async function ForumDetails({
 
           initialDislikes={forum.dislikes}
 
-          initialComments={forum.comments}
+          initialComments={forum.comments || []}
 
         />
 
@@ -191,7 +193,7 @@ export default async function ForumDetails({
 
             forumId={forum._id}
 
-            currentUser={session.user}
+            currentUser={user}
 
             comments={forum.comments || []}
 
