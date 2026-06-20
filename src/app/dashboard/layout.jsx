@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 import Image from "next/image";
-import { UserCircle2 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
 import {
   LayoutDashboard,
   Users,
@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   LogOut,
+  UserCircle2,
 } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
@@ -46,15 +47,25 @@ export default function DashboardLayout({ children }) {
 
   const handleLogout = async () => {
 
-    await authClient.signOut();
+    try {
 
-    toast.success("Logged out successfully");
+      await authClient.signOut();
 
-    router.push("/");
+      toast.success("Logged out successfully");
 
-    router.refresh();
+      router.push("/");
+
+      router.refresh();
+
+    } catch {
+
+      toast.error("Logout failed");
+
+    }
 
   };
+
+  // USER LINKS
 
   const userLinks = [
 
@@ -84,6 +95,8 @@ export default function DashboardLayout({ children }) {
 
   ];
 
+  // TRAINER LINKS
+
   const trainerLinks = [
 
     {
@@ -105,7 +118,7 @@ export default function DashboardLayout({ children }) {
     },
 
     {
-      name: "Add Forum Post",
+      name: "Add Forum",
       href: "/dashboard/trainer/add-forum",
       icon: MessageSquare,
     },
@@ -117,6 +130,8 @@ export default function DashboardLayout({ children }) {
     },
 
   ];
+
+  // ADMIN LINKS
 
   const adminLinks = [
 
@@ -203,7 +218,7 @@ export default function DashboardLayout({ children }) {
 
       <button
         onClick={() => setSidebarOpen(true)}
-        className="fixed top-5 left-5 z-50 lg:hidden bg-[#D9FF3F] p-3 rounded-xl"
+        className="fixed top-5 left-5 z-[60] lg:hidden bg-[#D9FF3F] p-3 rounded-xl"
       >
 
         <Menu className="text-black" />
@@ -213,61 +228,101 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar */}
 
       <aside
-        className={`fixed lg:static top-0 left-0 z-50 w-[290px] h-screen bg-[#0A0A18] border-r border-white/10 p-6 transition-all duration-300 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
+        className={`
+
+        fixed lg:static
+
+        top-0 left-0
+
+        z-50
+
+        w-[290px]
+
+        min-h-screen
+
+        bg-[#0A0A18]
+
+        border-r border-white/10
+
+        flex flex-col
+
+        transition-all duration-300
+
+        ${sidebarOpen
+          ? "translate-x-0"
+          : "-translate-x-full lg:translate-x-0"}
+
+      `}
       >
 
-        <div className="flex justify-between items-center mb-10">
+        {/* Header */}
 
-          <Link href="/" className="text-white text-3xl font-bold">
+        <div className="p-6 border-b border-white/10">
 
-            Fitverse
+          <div className="flex justify-between items-center">
 
-          </Link>
+            <Link
+              href="/"
+              className="text-white text-3xl font-bold"
+            >
 
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-white"
-          >
+              Fitverse
 
-            <X />
+            </Link>
 
-          </button>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden text-white"
+            >
+
+              <X />
+
+            </button>
+
+          </div>
 
         </div>
 
         {/* Profile */}
 
-        <div className="flex flex-col items-center border-b border-white/10 pb-8">
+        <div className="px-6 py-8 flex flex-col items-center border-b border-white/10">
 
           {user?.image ? (
-  <Image
-    src={user.image}
-    alt={user.name}
-    width={96}
-    height={96}
-    className="w-24 h-24 rounded-full object-cover border-4 border-[#D9FF3F]"
-  />
-) : (
-  <div className="w-24 h-24 rounded-full border-4 border-[#D9FF3F] bg-[#D9FF3F]/10 flex items-center justify-center">
-    <UserCircle2 size={60} className="text-[#D9FF3F]" />
-  </div>
-)}
 
-          <h2 className="text-white text-xl font-bold mt-4">
+            <Image
+              src={user.image}
+              alt={user.name}
+              width={96}
+              height={96}
+              className="w-24 h-24 rounded-full object-cover border-4 border-[#D9FF3F]"
+            />
+
+          ) : (
+
+            <div className="w-24 h-24 rounded-full border-4 border-[#D9FF3F] bg-[#D9FF3F]/10 flex items-center justify-center">
+
+              <UserCircle2
+                size={60}
+                className="text-[#D9FF3F]"
+              />
+
+            </div>
+
+          )}
+
+          <h2 className="text-white text-2xl font-bold mt-5">
 
             {user?.name}
 
           </h2>
 
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-center mt-1">
 
             {user?.email}
 
           </p>
 
-          <span className="mt-4 px-4 py-1 rounded-full bg-[#D9FF3F] text-black font-semibold capitalize">
+          <span className="mt-5 px-5 py-2 rounded-full bg-[#D9FF3F] text-black font-bold capitalize">
 
             {user?.role}
 
@@ -277,54 +332,97 @@ export default function DashboardLayout({ children }) {
 
         {/* Links */}
 
-        <div className="mt-8 flex flex-col gap-3">
+        <div className="flex-1 overflow-y-auto px-4 py-6">
 
-          {links.map((item) => {
+          <div className="flex flex-col gap-3">
 
-            const Icon = item.icon;
+            {links.map((item) => {
 
-            return (
+              const Icon = item.icon;
 
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition ${
-                  pathname === item.href
-                    ? "bg-[#D9FF3F] text-black font-semibold"
-                    : "text-gray-300 hover:bg-white/5"
-                }`}
-              >
+              return (
 
-                <Icon size={20} />
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`
 
-                {item.name}
+                  flex items-center gap-4
 
-              </Link>
+                  px-6 py-5
 
-            );
+                  rounded-3xl
 
-          })}
+                  transition-all
+
+                  ${pathname === item.href
+
+                      ? "bg-[#D9FF3F] text-black font-semibold"
+
+                      : "text-gray-300 hover:bg-white/5"}
+
+                `}
+                >
+
+                  <Icon size={22} />
+
+                  {item.name}
+
+                </Link>
+
+              );
+
+            })}
+
+          </div>
 
         </div>
 
         {/* Logout */}
 
-        <button
-          onClick={handleLogout}
-          className="absolute bottom-8 left-6 right-6 flex items-center justify-center gap-3 py-4 rounded-2xl bg-red-500/20 text-red-400 font-semibold cursor-pointer"
-        >
+        <div className="p-6 border-t border-white/10">
 
-          <LogOut size={20} />
+          <button
+            onClick={handleLogout}
+            className="
 
-          Logout
+            w-full
 
-        </button>
+            flex items-center justify-center gap-3
+
+            py-4
+
+            rounded-2xl
+
+            bg-red-500/20
+
+            text-red-400
+
+            font-semibold
+
+            hover:bg-red-500/30
+
+            transition
+
+            cursor-pointer
+
+          "
+          >
+
+            <LogOut size={20} />
+
+            Logout
+
+          </button>
+
+        </div>
 
       </aside>
 
       {/* Main Content */}
 
-      <main className="flex-1 p-8 lg:p-12 overflow-auto">
+      <main className="flex-1 overflow-x-hidden p-8 lg:p-12">
 
         {children}
 
@@ -333,4 +431,5 @@ export default function DashboardLayout({ children }) {
     </div>
 
   );
+
 }
