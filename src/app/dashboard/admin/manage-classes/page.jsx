@@ -15,7 +15,7 @@ export default function ManageClasses() {
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/classes/pending")
+    fetch("http://localhost:5000/classes/all")
 
       .then((res) => res.json())
 

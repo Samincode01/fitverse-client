@@ -1,10 +1,45 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
 
 export default function AddToFavouriteButton({ classId }) {
+
+  const [isFavourite, setIsFavourite] = useState(false);
+
+  useEffect(() => {
+
+    const checkFavourite = async () => {
+
+      const session = await authClient.getSession();
+
+      const user = session?.data?.user;
+
+      if (!user) return;
+
+      const res = await fetch(
+
+        `http://localhost:5000/favourites/${user.id}`
+
+      );
+
+      const data = await res.json();
+
+      const exists = data.some(
+
+        (item) => item.classId === classId
+
+      );
+
+      setIsFavourite(exists);
+
+    };
+
+    checkFavourite();
+
+  }, [classId]);
 
   const handleFavourite = async () => {
 
@@ -22,33 +57,47 @@ export default function AddToFavouriteButton({ classId }) {
 
       }
 
-      const response = await fetch("http://localhost:5000/favourites", {
+      if (isFavourite) {
 
-        method: "POST",
+        toast.info("Already added to favourites");
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+        return;
 
-        body: JSON.stringify({
+      }
 
-          userId: user.id,
+      const response = await fetch(
 
-          classId: classId,
+        "http://localhost:5000/favourites",
 
-        }),
+        {
 
-      });
+          method: "POST",
+
+          headers: {
+
+            "Content-Type": "application/json",
+
+          },
+
+          body: JSON.stringify({
+
+            userId: user.id,
+
+            classId,
+
+          }),
+
+        }
+
+      );
 
       const data = await response.json();
 
       if (data.insertedId) {
 
+        setIsFavourite(true);
+
         toast.success("Added to favourites");
-
-      } else {
-
-        toast.info(data.message || "Already added");
 
       }
 
@@ -65,15 +114,39 @@ export default function AddToFavouriteButton({ classId }) {
   return (
 
     <button
+
       onClick={handleFavourite}
-      className="px-10 py-5 rounded-full border border-[#D9FF3F]/30 text-[#D9FF3F] flex items-center gap-3 hover:bg-[#D9FF3F] hover:text-black transition-all duration-300 cursor-pointer"
+
+      className={`
+
+      px-10 py-5 rounded-full flex items-center gap-3
+
+      transition-all duration-300 cursor-pointer
+
+      ${
+
+        isFavourite
+
+          ? "bg-[#D9FF3F] text-black"
+
+          : "border border-[#D9FF3F]/30 text-[#D9FF3F] hover:bg-[#D9FF3F] hover:text-black"
+
+      }
+
+      `}
+
     >
 
-      <Heart size={22} />
+      <Heart size={22} fill={isFavourite ? "currentColor" : "none"} />
 
-      Add To Favourite
+      {isFavourite
+
+        ? "Added To Favourites"
+
+        : "Add To Favourite"}
 
     </button>
 
   );
+
 }
