@@ -1,35 +1,34 @@
-async function getForums() {
+"use client";
 
-  try {
+import { useEffect, useState } from "react";
 
-    const res = await fetch(
-      "http://localhost:5000/forums",
-      {
-        cache: "no-store",
-      }
-    );
+export default function ForumPage() {
 
-    if (!res.ok) {
+  const [forums, setForums] = useState([]);
 
-      return [];
+  const [page, setPage] = useState(1);
 
-    }
+  const [totalPages, setTotalPages] = useState(1);
 
-    return await res.json();
+  useEffect(() => {
 
-  } catch (error) {
+    fetch(
 
-    console.log(error);
+      `http://localhost:5000/forums?page=${page}&limit=6`
 
-    return [];
+    )
 
-  }
+      .then(res => res.json())
 
-}
+      .then(data => {
 
-export default async function ForumPage() {
+        setForums(data.forums);
 
-  const forums = await getForums();
+        setTotalPages(data.totalPages);
+
+      });
+
+  }, [page]);
 
   return (
 
@@ -59,79 +58,139 @@ export default async function ForumPage() {
 
         </div>
 
-        {forums.length === 0 ? (
+        {
 
-          <div className="text-center py-24 text-white">
+          forums.length === 0 ? (
 
-            No Forum Posts Yet
+            <div className="text-center py-24 text-white">
 
-          </div>
+              No Forum Posts Yet
 
-        ) : (
+            </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          ) : (
 
-            {forums.map((item) => (
+            <>
 
-              <div
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                key={item._id}
+                {
 
-                className="bg-[#0A0A18] rounded-[30px] overflow-hidden border border-white/10"
+                  forums.map((item) => (
 
-              >
+                    <div
 
-                <img
+                      key={item._id}
 
-                  src={item.image}
+                      className="bg-[#0A0A18] rounded-[30px] overflow-hidden border border-white/10"
 
-                  alt={item.title}
+                    >
 
-                  className="w-full h-[250px] object-cover"
+                      <img
 
-                />
+                        src={item.image}
 
-                <div className="p-7">
+                        alt={item.title}
 
-                  <p className="text-[#D9FF3F] text-sm font-semibold">
+                        className="w-full h-[250px] object-cover"
 
-                    By {item.author}
+                      />
 
-                  </p>
+                      <div className="p-7">
 
-                  <h2 className="text-white text-3xl font-bold mt-3">
+                        <p className="text-[#D9FF3F] text-sm font-semibold">
 
-                    {item.title}
+                          By {item.author}
 
-                  </h2>
+                        </p>
 
-                  <p className="text-gray-400 mt-5 leading-8">
+                        <h2 className="text-white text-3xl font-bold mt-3">
 
-                    {item.description}
+                          {item.title}
 
-                  </p>
+                        </h2>
 
-                  <a
+                        <p className="text-gray-400 mt-5 leading-8">
 
-                    href={`/forum/${item._id}`}
+                          {
 
-                    className="inline-block mt-8 px-7 py-3 rounded-xl bg-[#D9FF3F] text-black font-semibold"
+                            item.description.slice(0, 120)
 
-                  >
+                          }...
 
-                    Read More
+                        </p>
 
-                  </a>
+                        <a
 
-                </div>
+                          href={`/forum/${item._id}`}
+
+                          className="inline-block mt-8 px-7 py-3 rounded-xl bg-[#D9FF3F] text-black font-semibold"
+
+                        >
+
+                          Read More
+
+                        </a>
+
+                      </div>
+
+                    </div>
+
+                  ))
+
+                }
 
               </div>
 
-            ))}
+              <div className="flex justify-center gap-3 mt-16">
 
-          </div>
+                {
 
-        )}
+                  [...Array(totalPages)].map((_, index) => (
+
+                    <button
+
+                      key={index}
+
+                      onClick={() =>
+
+                        setPage(index + 1)
+
+                      }
+
+                      className={`
+
+                        w-12 h-12 rounded-full font-semibold
+
+                        ${
+
+                          page === index + 1
+
+                          ? "bg-[#D9FF3F] text-black"
+
+                          : "bg-[#0A0A18] text-white border border-white/10"
+
+                        }
+
+                      `}
+
+                    >
+
+                      {index + 1}
+
+                    </button>
+
+                  ))
+
+                }
+
+              </div>
+
+            </>
+
+          )
+
+        }
 
       </div>
 
