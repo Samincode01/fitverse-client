@@ -20,31 +20,65 @@ export default function UserDashboard() {
 
   const [favourites, setFavourites] = useState(0);
 
-  useEffect(() => {
+ useEffect(() => {
 
-    if (!user?.email) return;
+  const loadData = async () => {
 
-    fetch(`http://localhost:5000/trainer-applications/${user.email}`)
-      .then(res => res.json())
-      .then(data => {
+    try {
 
-        if (data) {
+      if (!user?.email || !user?.id) return;
 
-          setApplication(data);
+      // Trainer Application
 
-        }
+      const trainerRes = await fetch(
+        `http://localhost:5000/trainer-applications/${user.email}`
+      );
 
-      });
+      if (trainerRes.ok) {
 
-    fetch(`http://localhost:5000/favourites/${user.id}`)
-      .then(res => res.json())
-      .then(data => {
+        const trainerData = await trainerRes.json();
 
-        setFavourites(data.length);
+        setApplication(trainerData || null);
 
-      });
+      } else {
 
-  }, [user]);
+        setApplication(null);
+
+      }
+
+      // Favourites
+
+      const favRes = await fetch(
+        `http://localhost:5000/favourites/${user.id}`
+      );
+
+      if (favRes.ok) {
+
+        const favData = await favRes.json();
+
+        setFavourites(Array.isArray(favData) ? favData.length : 0);
+
+      } else {
+
+        setFavourites(0);
+
+      }
+
+    } catch (error) {
+
+      console.log("Dashboard Fetch Error:", error);
+
+      setApplication(null);
+
+      setFavourites(0);
+
+    }
+
+  };
+
+  loadData();
+
+}, [user]);
 
   return (
 
