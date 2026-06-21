@@ -11,6 +11,10 @@ export default function ClassesPage() {
 
   const [category, setCategory] = useState("All");
 
+  const [page, setPage] = useState(1);
+
+  const [totalPages, setTotalPages] = useState(1);
+
   const categories = [
 
     "All",
@@ -37,21 +41,37 @@ export default function ClassesPage() {
 
     fetch(
 
-      `http://localhost:5000/classes?search=${search}&category=${category}`
+      `http://localhost:5000/classes?page=${page}&limit=6&search=${search}&category=${category}`
 
     )
 
-      .then(res => res.json())
+      .then((res) => res.json())
 
-      .then(data => setClasses(data));
+      .then((data) => {
+
+        setClasses(data.classes);
+
+        setTotalPages(data.totalPages);
+
+      });
+
+  }, [page, search, category]);
+
+  // Reset to first page when searching/filtering
+
+  useEffect(() => {
+
+    setPage(1);
 
   }, [search, category]);
 
   return (
 
-    <section className="min-h-screen bg-[#030312] pt-36 pb-20 px-6">
+    <section className="min-h-screen bg-[#030312] pt-36 pb-24 px-6">
 
       <div className="max-w-7xl mx-auto">
+
+        {/* Heading */}
 
         <div className="text-center mb-16">
 
@@ -67,9 +87,17 @@ export default function ClassesPage() {
 
           </h1>
 
+          <p className="text-gray-400 mt-5 max-w-2xl mx-auto">
+
+            Discover expert-led training programs designed
+
+            to help you achieve your fitness goals.
+
+          </p>
+
         </div>
 
-        {/* Search + Filter */}
+        {/* Search & Filter */}
 
         <div className="flex flex-col md:flex-row gap-5 mb-14">
 
@@ -77,7 +105,7 @@ export default function ClassesPage() {
 
             type="text"
 
-            placeholder="Search by class name..."
+            placeholder="Search class..."
 
             value={search}
 
@@ -87,7 +115,7 @@ export default function ClassesPage() {
 
             }
 
-            className="flex-1 px-6 py-4 rounded-2xl bg-[#0A0A18] border border-white/10 text-white outline-none"
+            className="flex-1 px-6 py-4 rounded-2xl bg-[#0A0A18] border border-white/10 text-white outline-none focus:border-[#D9FF3F]"
 
           />
 
@@ -101,13 +129,13 @@ export default function ClassesPage() {
 
             }
 
-            className="px-6 py-4 rounded-2xl bg-[#0A0A18] border border-white/10 text-white"
+            className="px-6 py-4 rounded-2xl bg-[#0A0A18] border border-white/10 text-white outline-none focus:border-[#D9FF3F]"
 
           >
 
             {
 
-              categories.map(cat => (
+              categories.map((cat) => (
 
                 <option
 
@@ -131,55 +159,113 @@ export default function ClassesPage() {
 
         {/* Cards */}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
 
-          {
+          classes?.length > 0 ? (
 
-            classes.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-              classes.map(item => (
+              {
 
-                <ClassCard
+                classes.map((item) => (
 
-                  key={item._id}
+                  <ClassCard
 
-                  id={item._id}
+                    key={item._id}
 
-                  image={item.image}
+                    id={item._id}
 
-                  title={item.title}
+                    image={item.image}
 
-                  category={item.category}
+                    title={item.title}
 
-                  level={item.level}
+                    category={item.category}
 
-                  price={item.price}
+                    level={item.level}
 
-                  students={item.students}
+                    price={item.price}
 
-                  description={item.description}
+                    students={item.students}
 
-                />
+                    description={item.description}
 
-              ))
+                  />
 
-            ) : (
+                ))
 
-              <div className="col-span-full text-center py-20">
+              }
 
-                <h2 className="text-4xl text-white font-bold">
+            </div>
 
-                  No Classes Found
+          ) : (
 
-                </h2>
+            <div className="text-center py-24">
 
-              </div>
+              <h2 className="text-4xl font-bold text-white">
 
-            )
+                No Classes Found
 
-          }
+              </h2>
 
-        </div>
+            </div>
+
+          )
+
+        }
+
+        {/* Pagination */}
+
+        {
+
+          totalPages > 1 && (
+
+            <div className="flex justify-center gap-3 mt-16">
+
+              {
+
+                [...Array(totalPages)].map((_, index) => (
+
+                  <button
+
+                    key={index}
+
+                    onClick={() =>
+
+                      setPage(index + 1)
+
+                    }
+
+                    className={`
+
+                    w-12 h-12 rounded-full font-semibold transition
+
+                    ${
+
+                      page === index + 1
+
+                      ? "bg-[#D9FF3F] text-black"
+
+                      : "bg-[#0A0A18] text-white border border-white/10 hover:border-[#D9FF3F]"
+
+                    }
+
+                    `}
+
+                  >
+
+                    {index + 1}
+
+                  </button>
+
+                ))
+
+              }
+
+            </div>
+
+          )
+
+        }
 
       </div>
 
