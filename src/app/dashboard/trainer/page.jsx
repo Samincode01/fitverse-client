@@ -32,6 +32,10 @@ export default function TrainerDashboard() {
 
   });
 
+  const [loading, setLoading] = useState(true);
+
+  // Route Protection
+
   useEffect(() => {
 
     if (
@@ -56,21 +60,47 @@ export default function TrainerDashboard() {
 
   }, [user, isPending, router]);
 
+  // Load Stats
+
   useEffect(() => {
 
     const loadStats = async () => {
 
-      if (!user?.email) return;
+      try {
 
-      const res = await fetch(
+        if (!user?.email) return;
 
-        `http://localhost:5000/trainer-stats/${user.email}`
+        const res = await fetch(
 
-      );
+          `http://localhost:5000/trainer-stats/${user.email}`
 
-      const data = await res.json();
+        );
 
-      setStats(data);
+        const data = await res.json();
+
+        setStats({
+
+          totalClasses: data.totalClasses || 0,
+
+          totalStudents: data.totalStudents || 0,
+
+        });
+
+      }
+
+      catch (error) {
+
+        console.log(error);
+
+        toast.error("Failed to load dashboard");
+
+      }
+
+      finally {
+
+        setLoading(false);
+
+      }
 
     };
 
@@ -78,13 +108,13 @@ export default function TrainerDashboard() {
 
   }, [user]);
 
-  if (isPending) {
+  if (isPending || loading) {
 
     return (
 
       <div className="min-h-screen flex items-center justify-center bg-[#030312]">
 
-        <h1 className="text-white text-3xl">
+        <h1 className="text-white text-3xl font-bold">
 
           Loading...
 
@@ -107,6 +137,8 @@ export default function TrainerDashboard() {
     <section className="min-h-screen bg-[#030312] pt-28 px-6 pb-20">
 
       <div className="max-w-7xl mx-auto">
+
+        {/* Heading */}
 
         <div className="mb-12">
 
@@ -192,49 +224,53 @@ export default function TrainerDashboard() {
 
           <div className="flex flex-col md:flex-row items-center gap-8">
 
-            {user?.image ? (
+            {
 
-              <Image
+              user?.image ? (
 
-                src={user.image}
+                <Image
 
-                alt={user.name}
+                  src={user.image}
 
-                width={120}
+                  alt={user.name}
 
-                height={120}
+                  width={120}
 
-                className="w-28 h-28 rounded-full object-cover border-4 border-[#D9FF3F]"
+                  height={120}
 
-              />
-
-            ) : (
-
-              <div className="w-28 h-28 rounded-full bg-[#D9FF3F]/10 border-4 border-[#D9FF3F] flex items-center justify-center">
-
-                <ShieldCheck
-
-                  size={55}
-
-                  className="text-[#D9FF3F]"
+                  className="w-28 h-28 rounded-full object-cover border-4 border-[#D9FF3F]"
 
                 />
 
-              </div>
+              ) : (
 
-            )}
+                <div className="w-28 h-28 rounded-full bg-[#D9FF3F]/10 border-4 border-[#D9FF3F] flex items-center justify-center">
+
+                  <ShieldCheck
+
+                    size={55}
+
+                    className="text-[#D9FF3F]"
+
+                  />
+
+                </div>
+
+              )
+
+            }
 
             <div>
 
               <h1 className="text-white text-4xl font-bold">
 
-                {user.name}
+                {user?.name}
 
               </h1>
 
               <p className="text-gray-400 text-lg mt-3">
 
-                {user.email}
+                {user?.email}
 
               </p>
 

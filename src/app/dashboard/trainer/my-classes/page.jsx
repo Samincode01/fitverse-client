@@ -42,39 +42,7 @@ export default function MyClasses() {
 
   });
 
-  const students = [
-
-    {
-
-      id: 1,
-
-      name: "John Doe",
-
-      email: "john@gmail.com",
-
-    },
-
-    {
-
-      id: 2,
-
-      name: "Sarah Wilson",
-
-      email: "sarah@gmail.com",
-
-    },
-
-    {
-
-      id: 3,
-
-      name: "Michael Brown",
-
-      email: "michael@gmail.com",
-
-    },
-
-  ];
+ const [students, setStudents] = useState([]);
 
   useEffect(() => {
 
@@ -129,7 +97,33 @@ export default function MyClasses() {
     setEditModal(true);
 
   };
+const handleViewStudents = async (item) => {
 
+  try {
+
+    const res = await fetch(
+
+      `http://localhost:5000/class-students/${item._id}`
+
+    );
+
+    const data = await res.json();
+
+    setStudents(data);
+
+    setSelectedClass(item);
+
+    setStudentsModal(true);
+
+  }
+
+  catch {
+
+    toast.error("Failed to load students");
+
+  }
+
+};
   const handleChange = (e) => {
 
     setFormData({
@@ -266,194 +260,212 @@ const handleUpdate = async (e) => {
 
       <div className="overflow-x-auto rounded-[30px] border border-white/10 bg-[#0A0A18]">
 
-        <table className="w-full">
+  <table className="w-full">
 
-          <thead className="border-b border-white/10">
+  <thead className="border-b border-white/10">
 
-            <tr className="text-gray-400 text-left">
+    <tr className="text-gray-400 text-left">
 
-              <th className="px-8 py-5">
+      <th className="px-8 py-5">
 
-                Class
+        Class
 
-              </th>
+      </th>
 
-              <th>
+      <th>
 
-                Category
+        Total Students
 
-              </th>
+      </th>
 
-              <th>
+      <th>
 
-                Price
+        Category
 
-              </th>
+      </th>
 
-              <th>
+      <th>
 
-                Status
+        Price
 
-              </th>
+      </th>
 
-              <th className="text-center">
+      <th>
 
-                Actions
+        Status
 
-              </th>
+      </th>
 
-            </tr>
+      <th className="text-center">
 
-          </thead>
+        Actions
 
-          <tbody>
+      </th>
 
-            {classes.map((item) => (
+    </tr>
 
-              <tr
+  </thead>
 
-                key={item._id}
+  <tbody>
 
-                className="border-b border-white/5"
+    {classes.map((item) => (
 
-              >
+      <tr
 
-                <td className="px-8 py-6">
+        key={item._id}
 
-                  <div className="flex items-center gap-4">
+        className="border-b border-white/5"
 
-                    <div className="relative w-16 h-16 rounded-2xl overflow-hidden">
+      >
 
-                      <Image
+        {/* Class */}
 
-                        src={item.image}
+        <td className="px-8 py-6">
 
-                        alt={item.title}
+          <div className="flex items-center gap-4">
 
-                        fill
+            <div className="relative w-16 h-16 rounded-2xl overflow-hidden">
 
-                        className="object-cover"
+              <Image
 
-                      />
+                src={item.image}
 
-                    </div>
+                alt={item.title}
 
-                    <div>
+                fill
 
-                      <h3 className="text-white font-semibold">
+                className="object-cover"
 
-                        {item.title}
+              />
 
-                      </h3>
+            </div>
 
-                      <p className="text-gray-400 text-sm">
+            <div>
 
-                        {item.level}
+              <h3 className="text-white font-semibold">
 
-                      </p>
+                {item.title}
 
-                    </div>
+              </h3>
 
-                  </div>
+              <p className="text-gray-400 text-sm">
 
-                </td>
+                {item.level}
 
-                <td className="text-white">
+              </p>
 
-                  {item.category}
+            </div>
 
-                </td>
+          </div>
 
-                <td className="text-[#D9FF3F] font-bold">
+        </td>
 
-                  ${item.price}
+        {/* Total Students */}
 
-                </td>
+        <td className="text-white font-semibold">
 
-                <td>
+          {item.students || 0}
 
-                  <span
+        </td>
 
-                    className={`capitalize font-semibold ${
-                      item.status === "approved"
+        {/* Category */}
 
-                        ? "text-green-400"
+        <td className="text-white">
 
-                        : item.status === "rejected"
+          {item.category}
 
-                        ? "text-red-400"
+        </td>
 
-                        : "text-yellow-400"
+        {/* Price */}
 
-                    }`}
+        <td className="text-[#D9FF3F] font-bold">
 
-                  >
+          ${item.price}
 
-                    {item.status}
+        </td>
 
-                  </span>
+        {/* Status */}
 
-                </td>
+        <td>
 
-                <td>
+          <span
 
-                  <div className="flex justify-center gap-3">
+            className={`capitalize font-semibold ${
+              item.status === "approved"
 
-                    <button
+                ? "text-green-400"
 
-                      onClick={() => openEditModal(item)}
+                : item.status === "rejected"
 
-                      className="w-10 h-10 rounded-xl bg-[#D9FF3F]/15 text-[#D9FF3F] flex items-center justify-center"
+                ? "text-red-400"
 
-                    >
+                : "text-yellow-400"
 
-                      <Pencil size={18} />
+            }`}
 
-                    </button>
+          >
 
-                    <button
+            {item.status}
 
-                      onClick={() => handleDelete(item._id)}
+          </span>
 
-                      className="w-10 h-10 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center"
+        </td>
 
-                    >
+        {/* Actions */}
 
-                      <Trash2 size={18} />
+        <td>
 
-                    </button>
+          <div className="flex justify-center gap-3">
 
-                    <button
+            <button
 
-                      onClick={() => {
+              onClick={() => openEditModal(item)}
 
-                        setSelectedClass(item);
+              className="w-10 h-10 rounded-xl bg-[#D9FF3F]/15 text-[#D9FF3F] flex items-center justify-center"
 
-                        setStudentsModal(true);
+            >
 
-                      }}
+              <Pencil size={18} />
 
-                      className="px-4 rounded-xl bg-blue-500/15 text-blue-400 flex items-center gap-2"
+            </button>
 
-                    >
+            <button
 
-                      <Users size={18} />
+              onClick={() => handleDelete(item._id)}
 
-                      Students
+              className="w-10 h-10 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center"
 
-                    </button>
+            >
 
-                  </div>
+              <Trash2 size={18} />
 
-                </td>
+            </button>
 
-              </tr>
+            <button
 
-            ))}
+              onClick={() => handleViewStudents(item)}
 
-          </tbody>
+              className="px-4 rounded-xl bg-blue-500/15 text-blue-400 flex items-center gap-2 cursor-pointer"
 
-        </table>
+            >
+
+              <Users size={18} />
+
+              View
+
+            </button>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    ))}
+
+  </tbody>
+
+</table>
 
       </div>
             {/* Edit Modal */}
@@ -641,65 +653,129 @@ const handleUpdate = async (e) => {
 
       {/* Students Modal */}
 
-      {studentsModal && selectedClass && (
+     {/* Students Modal */}
 
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+{studentsModal && selectedClass && (
 
-          <div className="w-[550px] bg-[#0A0A18] rounded-[35px] border border-white/10 p-8 relative">
+  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
-            <button
+    <div className="w-[550px] max-h-[80vh] overflow-y-auto bg-[#0A0A18] rounded-[35px] border border-white/10 p-8 relative">
 
-              onClick={() => setStudentsModal(false)}
+      <button
 
-              className="absolute top-6 right-6 text-gray-400 hover:text-white"
+        onClick={() => setStudentsModal(false)}
 
-            >
+        className="absolute top-6 right-6 text-gray-400 hover:text-white"
 
-              <X size={24} />
+      >
 
-            </button>
+        <X size={24} />
 
-            <h2 className="text-3xl font-bold text-white mb-8">
+      </button>
 
-              Students Enrolled
+      <h2 className="text-3xl font-bold text-white mb-3">
 
-            </h2>
+        Students Enrolled
 
-            <div className="space-y-4">
+      </h2>
 
-              {students.map((student) => (
+      <p className="text-gray-400 mb-8">
 
-                <div
+        {selectedClass.title}
 
-                  key={student.id}
+      </p>
 
-                  className="bg-[#111122] rounded-2xl p-5 border border-white/5"
+      <div className="space-y-4">
 
-                >
+        {
+
+          students.length === 0 ? (
+
+            <div className="text-center py-10 text-gray-400">
+
+              No students enrolled yet.
+
+            </div>
+
+          ) : (
+
+            students.map((student, index) => (
+
+              <div
+
+                key={index}
+
+                className="bg-[#111122] rounded-2xl p-5 border border-white/5 flex items-center gap-4"
+
+              >
+
+                {
+
+                  student.userImage ? (
+
+                    <Image
+
+                      src={student.userImage}
+
+                      alt={student.userName}
+
+                      width={55}
+
+                      height={55}
+
+                      className="rounded-full object-cover"
+
+                    />
+
+                  ) : (
+
+                    <div className="w-[55px] h-[55px] rounded-full bg-[#D9FF3F]/10 flex items-center justify-center">
+
+                      <UserCircle2
+
+                        size={28}
+
+                        className="text-[#D9FF3F]"
+
+                      />
+
+                    </div>
+
+                  )
+
+                }
+
+                <div>
 
                   <h3 className="text-white font-semibold">
 
-                    {student.name}
+                    {student.userName}
 
                   </h3>
 
                   <p className="text-gray-400 text-sm mt-1">
 
-                    {student.email}
+                    {student.userEmail}
 
                   </p>
 
                 </div>
 
-              ))}
+              </div>
 
-            </div>
+            ))
 
-          </div>
+          )
 
-        </div>
+        }
 
-      )}
+      </div>
+
+    </div>
+
+  </div>
+
+)}
 
     </div>
 
