@@ -23,7 +23,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({
     users: 0,
     classes: 0,
-    bookings: 180, // static for now
+    bookings: 0,
   });
 
   const [loadingStats, setLoadingStats] = useState(true);
@@ -63,27 +63,39 @@ useEffect(() => {
 
     try {
 
-      const [usersRes, classesRes] = await Promise.all([
+  const [
 
-        fetch("http://localhost:5000/users"),
+  usersRes,
 
-        fetch("http://localhost:5000/classes"),
+  classesRes,
 
-      ]);
+  bookingsRes,
+
+] = await Promise.all([
+
+  fetch("http://localhost:5000/users"),
+
+  fetch("http://localhost:5000/classes"),
+
+  fetch("http://localhost:5000/bookings-count"),
+
+]);
 
       const users = await usersRes.json();
+
+const bookingData = await bookingsRes.json();
 
       const classData = await classesRes.json();
 
       setStats({
 
-        users: users.length,
+  users: users.length,
 
-        classes: classData.total,
+  classes: classData.total,
 
-        bookings: 180,
+  bookings: bookingData.total,
 
-      });
+});
 
     } catch (error) {
 

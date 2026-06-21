@@ -3,11 +3,17 @@
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+
 import {
+
   BookOpen,
+
   Heart,
+
   UserCircle2,
+
   BadgeCheck,
+
 } from "lucide-react";
 
 export default function UserDashboard() {
@@ -20,69 +26,115 @@ export default function UserDashboard() {
 
   const [favourites, setFavourites] = useState(0);
 
- useEffect(() => {
+  const [bookings, setBookings] = useState([]);
 
-  const loadData = async () => {
+  const [loading, setLoading] = useState(true);
 
-    try {
+  useEffect(() => {
 
-      if (!user?.email || !user?.id) return;
+    const loadData = async () => {
 
-      // Trainer Application
+      try {
 
-      const trainerRes = await fetch(
-        `http://localhost:5000/trainer-applications/${user.email}`
-      );
+        if (!user?.email || !user?.id) return;
 
-      if (trainerRes.ok) {
+        // Trainer Application
 
-        const trainerData = await trainerRes.json();
+        const trainerRes = await fetch(
 
-        setApplication(trainerData || null);
+          `http://localhost:5000/trainer-applications/${user.email}`
 
-      } else {
+        );
 
-        setApplication(null);
+        if (trainerRes.ok) {
+
+          const trainerData = await trainerRes.json();
+
+          setApplication(trainerData || null);
+
+        }
+
+        // Favourites
+
+        const favRes = await fetch(
+
+          `http://localhost:5000/favourites/${user.id}`
+
+        );
+
+        if (favRes.ok) {
+
+          const favData = await favRes.json();
+
+          setFavourites(
+
+            Array.isArray(favData)
+
+              ? favData.length
+
+              : 0
+
+          );
+
+        }
+
+        // Booked Classes
+
+        const bookingRes = await fetch(
+
+          `http://localhost:5000/bookings/${user.email}`
+
+        );
+
+        if (bookingRes.ok) {
+
+          const bookingData = await bookingRes.json();
+
+          setBookings(bookingData);
+
+        }
 
       }
 
-      // Favourites
+      catch (error) {
 
-      const favRes = await fetch(
-        `http://localhost:5000/favourites/${user.id}`
-      );
-
-      if (favRes.ok) {
-
-        const favData = await favRes.json();
-
-        setFavourites(Array.isArray(favData) ? favData.length : 0);
-
-      } else {
-
-        setFavourites(0);
+        console.log(error);
 
       }
 
-    } catch (error) {
+      finally {
 
-      console.log("Dashboard Fetch Error:", error);
+        setLoading(false);
 
-      setApplication(null);
+      }
 
-      setFavourites(0);
+    };
 
-    }
+    loadData();
 
-  };
+  }, [user]);
 
-  loadData();
+  if (loading) {
 
-}, [user]);
+    return (
+
+      <div className="min-h-[70vh] flex items-center justify-center">
+
+        <h1 className="text-white text-3xl font-bold">
+
+          Loading...
+
+        </h1>
+
+      </div>
+
+    );
+
+  }
 
   return (
 
-    <div className="space-y-8">
+    <div className="space-y-8 mt-9">
 
       {/* Stats */}
 
@@ -95,8 +147,11 @@ export default function UserDashboard() {
             <div className="w-14 h-14 rounded-2xl bg-[#D9FF3F]/10 flex items-center justify-center">
 
               <BookOpen
+
                 size={28}
+
                 className="text-[#D9FF3F]"
+
               />
 
             </div>
@@ -111,7 +166,7 @@ export default function UserDashboard() {
 
               <h2 className="text-4xl font-bold text-white">
 
-                0
+                {bookings.length}
 
               </h2>
 
@@ -128,8 +183,11 @@ export default function UserDashboard() {
             <div className="w-14 h-14 rounded-2xl bg-[#D9FF3F]/10 flex items-center justify-center">
 
               <Heart
+
                 size={28}
+
                 className="text-[#D9FF3F]"
+
               />
 
             </div>
@@ -168,29 +226,43 @@ export default function UserDashboard() {
 
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
 
-          {user?.image ? (
+          {
 
-            <Image
-              src={user.image}
-              alt={user.name}
-              width={90}
-              height={90}
-              priority
-              className="rounded-full border-4 border-[#D9FF3F] object-cover"
-            />
+            user?.image ? (
 
-          ) : (
+              <Image
 
-            <div className="w-[90px] h-[90px] rounded-full border-4 border-[#D9FF3F] bg-[#D9FF3F]/10 flex items-center justify-center">
+                src={user.image}
 
-              <UserCircle2
-                size={55}
-                className="text-[#D9FF3F]"
+                alt={user.name}
+
+                width={90}
+
+                height={90}
+
+                priority
+
+                className="rounded-full border-4 border-[#D9FF3F] object-cover"
+
               />
 
-            </div>
+            ) : (
 
-          )}
+              <div className="w-[90px] h-[90px] rounded-full border-4 border-[#D9FF3F] bg-[#D9FF3F]/10 flex items-center justify-center">
+
+                <UserCircle2
+
+                  size={55}
+
+                  className="text-[#D9FF3F]"
+
+                />
+
+              </div>
+
+            )
+
+          }
 
           <div className="space-y-4">
 
@@ -248,71 +320,97 @@ export default function UserDashboard() {
 
         </h2>
 
-        {!application ? (
+        {
 
-          <p className="text-gray-400">
+          !application ? (
 
-            You haven't applied as a trainer yet.
+            <p className="text-gray-400">
 
-          </p>
+              You haven't applied as a trainer yet.
 
-        ) : (
+            </p>
 
-          <>
+          ) : (
 
-            <div className="flex items-center gap-3">
+            <>
 
-              <BadgeCheck
-                size={24}
-                className={
-                  application.status === "approved"
-                    ? "text-green-400"
-                    : application.status === "rejected"
-                    ? "text-red-400"
-                    : "text-yellow-400"
-                }
-              />
+              <div className="flex items-center gap-3">
 
-              <h3
-                className={`text-xl font-bold capitalize ${
-                  application.status === "approved"
-                    ? "text-green-400"
-                    : application.status === "rejected"
-                    ? "text-red-400"
-                    : "text-yellow-400"
-                }`}
-              >
+                <BadgeCheck
 
-                {application.status}
+                  size={24}
 
-              </h3>
+                  className={
 
-            </div>
+                    application.status === "approved"
 
-            {application.status === "rejected" &&
-              application.feedback && (
+                      ? "text-green-400"
 
-                <div className="mt-5 p-5 rounded-2xl bg-red-500/10 border border-red-500/20">
+                      : application.status === "rejected"
 
-                  <p className="text-red-300 font-semibold mb-2">
+                      ? "text-red-400"
 
-                    Admin Feedback
+                      : "text-yellow-400"
 
-                  </p>
+                  }
 
-                  <p className="text-gray-300">
+                />
 
-                    {application.feedback}
+                <h3
 
-                  </p>
+                  className={`text-xl font-bold capitalize ${
 
-                </div>
+                    application.status === "approved"
 
-            )}
+                      ? "text-green-400"
 
-          </>
+                      : application.status === "rejected"
 
-        )}
+                      ? "text-red-400"
+
+                      : "text-yellow-400"
+
+                  }`}
+
+                >
+
+                  {application.status}
+
+                </h3>
+
+              </div>
+
+              {
+
+                application.status === "rejected" &&
+
+                application.feedback && (
+
+                  <div className="mt-5 p-5 rounded-2xl bg-red-500/10 border border-red-500/20">
+
+                    <p className="text-red-300 font-semibold mb-2">
+
+                      Admin Feedback
+
+                    </p>
+
+                    <p className="text-gray-300">
+
+                      {application.feedback}
+
+                    </p>
+
+                  </div>
+
+                )
+
+              }
+
+            </>
+
+          )
+
+        }
 
       </div>
 
