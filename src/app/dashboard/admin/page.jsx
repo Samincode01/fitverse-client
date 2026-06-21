@@ -57,51 +57,51 @@ export default function AdminDashboard() {
 
   // Load Statistics
 
-  useEffect(() => {
+useEffect(() => {
 
-    const fetchStats = async () => {
+  const fetchStats = async () => {
 
-      try {
+    try {
 
-        const [usersRes, classesRes] = await Promise.all([
+      const [usersRes, classesRes] = await Promise.all([
 
-          fetch("http://localhost:5000/users"),
+        fetch("http://localhost:5000/users"),
 
-          fetch("http://localhost:5000/classes"),
+        fetch("http://localhost:5000/classes"),
 
-        ]);
+      ]);
 
-        const users = await usersRes.json();
+      const users = await usersRes.json();
 
-        const classes = await classesRes.json();
+      const classData = await classesRes.json();
 
-        setStats({
+      setStats({
 
-          users: users.length,
+        users: users.length,
 
-          classes: classes.length,
+        classes: classData.total,
 
-          bookings: 180,
+        bookings: 180,
 
-        });
+      });
 
-      } catch (error) {
+    } catch (error) {
 
-        console.log(error);
+      console.log(error);
 
-        toast.error("Failed to load statistics");
+      toast.error("Failed to load statistics");
 
-      } finally {
+    } finally {
 
-        setLoadingStats(false);
+      setLoadingStats(false);
 
-      }
+    }
 
-    };
+  };
 
-    fetchStats();
+  fetchStats();
 
-  }, []);
+}, []);
 
   if (isPending || loadingStats) {
 
