@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -92,15 +93,23 @@ export default function PaymentSuccess() {
 
         const data = await res.json();
 
-        if (data.insertedId) {
+        if (res.status === 403) {
 
-          toast.success("Booking Saved");
+          toast.error(data.message);
+
+          return;
 
         }
 
         if (data.message === "Already booked") {
 
           toast.info("Already booked");
+
+        }
+
+        if (data.insertedId) {
+
+          toast.success("Booking Saved");
 
         }
 
@@ -145,6 +154,34 @@ export default function PaymentSuccess() {
           Your class booking has been completed successfully.
 
         </p>
+
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+
+          <Link
+
+            href="/"
+
+            className="px-8 py-4 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition"
+
+          >
+
+            Go To Home
+
+          </Link>
+
+          <Link
+
+            href="/dashboard/user/booked-classes"
+
+            className="px-8 py-4 rounded-full bg-[#D9FF3F] text-black font-bold hover:scale-105 transition"
+
+          >
+
+            My Booked Classes
+
+          </Link>
+
+        </div>
 
       </div>
 
