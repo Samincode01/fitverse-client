@@ -13,6 +13,7 @@ import {
 
 import { auth } from "@/lib/auth";
 import AddToFavouriteButton from "@/component/AddToFavouriteButton";
+import BookNowButton from "@/component/BookNowButton";
 
 async function getClass(id) {
 
@@ -300,15 +301,15 @@ export default async function ClassDetails({ params }) {
 
               {/* Static Booking */}
 
-              <button
-                className="w-full mt-10 py-5 rounded-full bg-[#D9FF3F] text-black font-bold text-lg hover:scale-105 transition-all cursor-pointer"
-              >
+             <BookNowButton
 
-                <Calendar className="inline mr-3" />
+ classId={data._id}
 
-                Book Now
+ title={data.title}
 
-              </button>
+ price={data.price}
+
+/>
 
               {/* Favourite */}
 
