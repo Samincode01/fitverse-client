@@ -1,77 +1,190 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import ClassCard from "@/component/ClassCard/ClassCard";
 
-async function getClasses() {
-  const res = await fetch("http://localhost:5000/classes", {
-    cache: "no-store",
-  });
+export default function ClassesPage() {
 
-  if (!res.ok) {
-    return [];
-  }
+  const [classes, setClasses] = useState([]);
 
-  return res.json();
-}
+  const [search, setSearch] = useState("");
 
-export default async function ClassesPage() {
-  const classes = await getClasses();
+  const [category, setCategory] = useState("All");
+
+  const categories = [
+
+    "All",
+
+    "Yoga",
+
+    "Pilates",
+
+    "Cycling",
+
+    "Fitness",
+
+    "HIIT",
+
+    "Dance",
+
+    "Boxing",
+
+    "Strength",
+
+  ];
+
+  useEffect(() => {
+
+    fetch(
+
+      `http://localhost:5000/classes?search=${search}&category=${category}`
+
+    )
+
+      .then(res => res.json())
+
+      .then(data => setClasses(data));
+
+  }, [search, category]);
 
   return (
+
     <section className="min-h-screen bg-[#030312] pt-36 pb-20 px-6">
+
       <div className="max-w-7xl mx-auto">
 
         <div className="text-center mb-16">
 
           <h1 className="text-5xl font-bold text-white">
-            Explore Our
-            <span className="text-[#D9FF3F]"> Fitness Classes</span>
-          </h1>
 
-          <p className="text-gray-400 mt-5 max-w-2xl mx-auto">
-            Discover expert-led training programs designed
-            to help you achieve your goals.
-          </p>
+            Explore Our
+
+            <span className="text-[#D9FF3F]">
+
+              {" "}Fitness Classes
+
+            </span>
+
+          </h1>
 
         </div>
 
+        {/* Search + Filter */}
+
+        <div className="flex flex-col md:flex-row gap-5 mb-14">
+
+          <input
+
+            type="text"
+
+            placeholder="Search by class name..."
+
+            value={search}
+
+            onChange={(e) =>
+
+              setSearch(e.target.value)
+
+            }
+
+            className="flex-1 px-6 py-4 rounded-2xl bg-[#0A0A18] border border-white/10 text-white outline-none"
+
+          />
+
+          <select
+
+            value={category}
+
+            onChange={(e) =>
+
+              setCategory(e.target.value)
+
+            }
+
+            className="px-6 py-4 rounded-2xl bg-[#0A0A18] border border-white/10 text-white"
+
+          >
+
+            {
+
+              categories.map(cat => (
+
+                <option
+
+                  key={cat}
+
+                  value={cat}
+
+                >
+
+                  {cat}
+
+                </option>
+
+              ))
+
+            }
+
+          </select>
+
+        </div>
+
+        {/* Cards */}
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-          {classes?.length > 0 ? (
+          {
 
-            classes.map((item) => (
+            classes.length > 0 ? (
 
-              <ClassCard
-                key={item._id}
-                id={item._id}
-                image={item.image}
-                title={item.title}
-                category={item.category}
-                level={item.level}
-                price={item.price}
-                students={item.students}
-                description={item.description}
-              />
+              classes.map(item => (
 
-            ))
+                <ClassCard
 
-          ) : (
+                  key={item._id}
 
-            <div className="col-span-full text-center py-24">
+                  id={item._id}
 
-              <h2 className="text-4xl font-bold text-white">
-                No Classes Available
-              </h2>
+                  image={item.image}
 
-              <p className="text-gray-400 mt-4 text-lg">
-                New fitness classes will be added soon.
-              </p>
+                  title={item.title}
 
-            </div>
+                  category={item.category}
 
-          )}
+                  level={item.level}
+
+                  price={item.price}
+
+                  students={item.students}
+
+                  description={item.description}
+
+                />
+
+              ))
+
+            ) : (
+
+              <div className="col-span-full text-center py-20">
+
+                <h2 className="text-4xl text-white font-bold">
+
+                  No Classes Found
+
+                </h2>
+
+              </div>
+
+            )
+
+          }
 
         </div>
 
       </div>
+
     </section>
+
   );
+
 }
