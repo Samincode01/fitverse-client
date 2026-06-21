@@ -67,15 +67,23 @@ export default function CommentSection({
 
       const data = await res.json();
 
-      if (data.modifiedCount > 0) {
+     if (res.status === 403) {
 
-        setComments([...comments, comment]);
+  toast.error(data.message);
 
-        setText("");
+  return;
 
-        toast.success("Comment Added");
+}
 
-      }
+if (data.modifiedCount > 0) {
+
+  setComments([...comments, comment]);
+
+  setText("");
+
+  toast.success("Comment Added");
+
+}
 
     } catch {
 
