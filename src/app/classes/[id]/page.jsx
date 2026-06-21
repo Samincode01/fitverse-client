@@ -1,24 +1,28 @@
+import Image from "next/image";
+import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+
+import {
+  Users,
+  BarChart3,
+  DollarSign,
+  ArrowLeft,
+  Calendar,
+} from "lucide-react";
+
 import { auth } from "@/lib/auth";
+import AddToFavouriteButton from "@/component/AddToFavouriteButton";
 
-import ForumActions from "@/component/ForumActions";
-import CommentSection from "@/component/CommentSection/CommentSection";
-
-async function getForum(id) {
+async function getClass(id) {
 
   try {
 
     const res = await fetch(
-
-      `http://localhost:5000/forums/${id}`,
-
+      `http://localhost:5000/classes/${id}`,
       {
-
         cache: "no-store",
-
       }
-
     );
 
     if (!res.ok) {
@@ -27,11 +31,9 @@ async function getForum(id) {
 
     }
 
-    return await res.json();
+    return res.json();
 
-  } catch (error) {
-
-    console.log(error);
+  } catch {
 
     return null;
 
@@ -39,11 +41,7 @@ async function getForum(id) {
 
 }
 
-export default async function ForumDetails({
-
-  params,
-
-}) {
+export default async function ClassDetails({ params }) {
 
   const session = await auth.api.getSession({
 
@@ -57,33 +55,42 @@ export default async function ForumDetails({
 
   }
 
+  if (session.user.role !== "user") {
+
+    redirect("/");
+
+  }
+
   const { id } = await params;
 
-  const forum = await getForum(id);
+  const data = await getClass(id);
 
-  if (!forum) {
+  if (!data) {
 
     return (
 
-      <div className="min-h-screen bg-[#030312] flex items-center justify-center">
+      <section className="min-h-screen bg-[#030312] flex items-center justify-center">
 
         <div className="text-center">
 
           <h1 className="text-5xl font-bold text-white">
 
-            Post Not Found
+            Class Not Found
 
           </h1>
 
-          <p className="text-gray-400 mt-5">
+          <Link
+            href="/classes"
+            className="inline-block mt-8 px-8 py-4 rounded-full bg-[#D9FF3F] text-black font-bold"
+          >
 
-            This forum post does not exist.
+            Back To Classes
 
-          </p>
+          </Link>
 
         </div>
 
-      </div>
+      </section>
 
     );
 
@@ -91,111 +98,231 @@ export default async function ForumDetails({
 
   return (
 
-    <section className="min-h-screen bg-[#030312] pt-36 pb-24 px-6">
+    <section className="min-h-screen bg-[#030312] pb-24">
 
-      <div className="max-w-5xl mx-auto">
+      {/* Hero */}
 
-        {/* Cover Image */}
+      <div className="relative h-[500px]">
 
-        <div className="overflow-hidden rounded-[35px] border border-white/10">
+        <Image
+          src={data.image}
+          alt={data.title}
+          fill
+          priority
+          className="object-cover"
+        />
 
-          <img
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-[#030312]" />
 
-            src={forum.image}
+      </div>
 
-            alt={forum.title}
+      <div className="max-w-7xl mx-auto px-6 -mt-40 relative z-10">
 
-            className="w-full h-[500px] object-cover"
+        <Link
+          href="/classes"
+          className="inline-flex items-center gap-3 text-[#D9FF3F] mb-10"
+        >
 
-          />
+          <ArrowLeft size={18} />
 
-        </div>
+          Back to Classes
 
-        {/* Content */}
+        </Link>
 
-        <div className="mt-12">
+        <div className="grid lg:grid-cols-3 gap-10">
 
-          <div className="flex items-center gap-4">
+          {/* Left */}
 
-            {forum.authorImage && (
+          <div className="lg:col-span-2">
 
-              <img
+            <span className="px-5 py-2 rounded-full bg-[#D9FF3F]/10 border border-[#D9FF3F]/20 text-[#D9FF3F]">
 
-                src={forum.authorImage}
+              {data.category}
 
-                alt={forum.author}
+            </span>
 
-                className="w-14 h-14 rounded-full border-2 border-[#D9FF3F]"
+            <h1 className="text-6xl font-bold text-white mt-8">
 
-              />
+              {data.title}
 
-            )}
+            </h1>
 
-            <div>
+            <p className="text-gray-400 mt-8 text-lg leading-9">
 
-              <p className="text-[#D9FF3F] font-semibold">
+              {data.description}
 
-                {forum.author}
+            </p>
 
-              </p>
+            {/* Info */}
 
-              <p className="text-gray-400 text-sm">
+            <div className="grid md:grid-cols-3 gap-6 mt-14">
 
-                {forum.role}
+              <div className="rounded-3xl bg-white/[0.03] border border-white/10 p-8">
 
-              </p>
+                <BarChart3
+                  className="text-[#D9FF3F]"
+                  size={30}
+                />
+
+                <p className="text-gray-400 mt-6">
+
+                  Level
+
+                </p>
+
+                <h2 className="text-white text-3xl font-bold mt-2">
+
+                  {data.level}
+
+                </h2>
+
+              </div>
+
+              <div className="rounded-3xl bg-white/[0.03] border border-white/10 p-8">
+
+                <Users
+                  className="text-[#D9FF3F]"
+                  size={30}
+                />
+
+                <p className="text-gray-400 mt-6">
+
+                  Students
+
+                </p>
+
+                <h2 className="text-white text-3xl font-bold mt-2">
+
+                  {data.students}
+
+                </h2>
+
+              </div>
+
+              <div className="rounded-3xl bg-white/[0.03] border border-white/10 p-8">
+
+                <DollarSign
+                  className="text-[#D9FF3F]"
+                  size={30}
+                />
+
+                <p className="text-gray-400 mt-6">
+
+                  Price
+
+                </p>
+
+                <h2 className="text-white text-3xl font-bold mt-2">
+
+                  ${data.price}
+
+                </h2>
+
+              </div>
 
             </div>
 
           </div>
 
-          <h1 className="text-6xl font-bold text-white mt-8 leading-tight">
+          {/* Right */}
 
-            {forum.title}
+          <div>
 
-          </h1>
+            <div className="sticky top-28 rounded-[35px] bg-white/[0.03] border border-white/10 p-8">
 
-          <p className="text-gray-300 text-lg leading-10 mt-10">
+              <div className="text-center">
 
-            {forum.description}
+                <p className="text-gray-400">
 
-          </p>
+                  Course Price
 
-        </div>
+                </p>
 
-        {/* Likes / Dislikes */}
+                <h1 className="text-6xl font-bold text-[#D9FF3F] mt-4">
 
-        <ForumActions
+                  ${data.price}
 
-          forumId={forum._id}
+                </h1>
 
-          initialLikes={forum.likes}
+              </div>
 
-          initialDislikes={forum.dislikes}
+              <div className="mt-10 space-y-5">
 
-          initialComments={forum.comments}
+                <div className="flex justify-between">
 
-        />
+                  <span className="text-gray-400">
 
-        {/* Comments */}
+                    Category
 
-        <div className="mt-20">
+                  </span>
 
-          <h2 className="text-4xl font-bold text-white mb-10">
+                  <span className="text-white">
 
-            Comments
+                    {data.category}
 
-          </h2>
+                  </span>
 
-          <CommentSection
+                </div>
 
-            forumId={forum._id}
+                <div className="flex justify-between">
 
-            currentUser={session.user}
+                  <span className="text-gray-400">
 
-            comments={forum.comments || []}
+                    Difficulty
 
-          />
+                  </span>
+
+                  <span className="text-white">
+
+                    {data.level}
+
+                  </span>
+
+                </div>
+
+                <div className="flex justify-between">
+
+                  <span className="text-gray-400">
+
+                    Students
+
+                  </span>
+
+                  <span className="text-white">
+
+                    {data.students}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+              {/* Static Booking */}
+
+              <button
+                className="w-full mt-10 py-5 rounded-full bg-[#D9FF3F] text-black font-bold text-lg hover:scale-105 transition-all cursor-pointer"
+              >
+
+                <Calendar className="inline mr-3" />
+
+                Book Now
+
+              </button>
+
+              {/* Favourite */}
+
+              <div className="mt-5 flex justify-center">
+
+                <AddToFavouriteButton
+                  classId={data._id}
+                />
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
