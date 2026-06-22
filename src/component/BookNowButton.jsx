@@ -143,7 +143,11 @@ export default function BookNowButton({
 
     <button
 
-      disabled={alreadyBooked || checking}
+      disabled={
+  alreadyBooked ||
+  checking ||
+  user?.role !== "user"
+}
 
       onClick={handleBooking}
 
@@ -166,18 +170,14 @@ export default function BookNowButton({
       <Calendar className="inline mr-3" />
 
       {
-
-        checking
-
-          ? "Checking..."
-
-          : alreadyBooked
-
-          ? "Already Booked"
-
-          : "Book Now"
-
-      }
+  checking
+    ? "Checking..."
+    : alreadyBooked
+    ? "Already Booked"
+    : user?.role !== "user"
+    ? "Members Only"
+    : "Book Now"
+}
 
     </button>
 

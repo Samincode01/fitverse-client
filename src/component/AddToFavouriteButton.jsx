@@ -8,7 +8,9 @@ import { authClient } from "@/lib/auth-client";
 export default function AddToFavouriteButton({ classId }) {
 
   const [isFavourite, setIsFavourite] = useState(false);
+const { data: session } = authClient.useSession();
 
+const user = session?.user || session?.data?.user;
   useEffect(() => {
 
     const checkFavourite = async () => {
@@ -113,39 +115,59 @@ export default function AddToFavouriteButton({ classId }) {
 
   return (
 
-    <button
+   <button
 
-      onClick={handleFavourite}
+  onClick={handleFavourite}
 
-      className={`
+  disabled={isFavourite || user?.role !== "user"}
 
-      px-10 py-5 rounded-full flex items-center gap-3
+  className={`
 
-      transition-all duration-300 cursor-pointer
+    px-10 py-5 rounded-full flex items-center gap-3
 
-      ${
+    transition-all duration-300
 
-        isFavourite
+    ${
 
-          ? "bg-[#D9FF3F] text-black"
+      isFavourite
 
-          : "border border-[#D9FF3F]/30 text-[#D9FF3F] hover:bg-[#D9FF3F] hover:text-black"
+        ? "bg-[#D9FF3F] text-black cursor-not-allowed"
 
-      }
+        : user?.role !== "user"
 
-      `}
+        ? "border border-[#D9FF3F]/30 text-[#D9FF3F] opacity-50 cursor-not-allowed"
 
-    >
+        : "border border-[#D9FF3F]/30 text-[#D9FF3F] hover:bg-[#D9FF3F] hover:text-black cursor-pointer"
 
-      <Heart size={22} fill={isFavourite ? "currentColor" : "none"} />
+    }
 
-      {isFavourite
+  `}
 
-        ? "Added To Favourites"
+>
 
-        : "Add To Favourite"}
+  <Heart
 
-    </button>
+    size={22}
+
+    fill={isFavourite ? "currentColor" : "none"}
+
+  />
+
+  {
+
+    isFavourite
+
+      ? "Added To Favourites"
+
+      : user?.role !== "user"
+
+      ? "Members Only"
+
+      : "Add To Favourite"
+
+  }
+
+</button>
 
   );
 

@@ -56,12 +56,6 @@ export default async function ClassDetails({ params }) {
 
   }
 
-  if (session.user.role !== "user") {
-
-    redirect("/");
-
-  }
-
   const { id } = await params;
 
   const data = await getClass(id);

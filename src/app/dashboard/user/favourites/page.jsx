@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Heart } from "lucide-react";
+import Swal from "sweetalert2";
 import { authClient } from "@/lib/auth-client";
 
 export default function FavouritePage() {
 
   const [favourites, setFavourites] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,7 +32,9 @@ export default function FavouritePage() {
         }
 
         const favRes = await fetch(
+
           `http://localhost:5000/favourites/${userId}`
+
         );
 
         const favData = await favRes.json();
@@ -38,7 +42,9 @@ export default function FavouritePage() {
         const classPromises = favData.map(async (item) => {
 
           const res = await fetch(
+
             `http://localhost:5000/classes/${item.classId}`
+
           );
 
           return res.json();
@@ -49,11 +55,15 @@ export default function FavouritePage() {
 
         setFavourites(classes);
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.log(error);
 
-      } finally {
+      }
+
+      finally {
 
         setLoading(false);
 
@@ -65,6 +75,70 @@ export default function FavouritePage() {
 
   }, []);
 
+  const handleDeleteFavourite = async (classId) => {
+
+    const session = await authClient.getSession();
+
+    const userId = session?.data?.user?.id;
+
+    const result = await Swal.fire({
+
+      title: "Remove Favourite?",
+
+      text: "This class will be removed from your favourites.",
+
+      icon: "warning",
+
+      showCancelButton: true,
+
+      confirmButtonText: "Yes, Remove",
+
+      confirmButtonColor: "#d33",
+
+    });
+
+    if (!result.isConfirmed) return;
+
+    const res = await fetch(
+
+      `http://localhost:5000/favourites/${userId}/${classId}`,
+
+      {
+
+        method: "DELETE",
+
+      }
+
+    );
+
+    const data = await res.json();
+
+    if (data.deletedCount > 0) {
+
+      setFavourites(
+
+        favourites.filter(
+
+          item => item._id !== classId
+
+        )
+
+      );
+
+      Swal.fire({
+
+        title: "Removed!",
+
+        text: "Favourite removed successfully.",
+
+        icon: "success",
+
+      });
+
+    }
+
+  };
+
   if (loading) {
 
     return (
@@ -72,7 +146,9 @@ export default function FavouritePage() {
       <section className="min-h-screen bg-[#030312] flex items-center justify-center">
 
         <h1 className="text-white text-3xl">
+
           Loading...
+
         </h1>
 
       </section>
@@ -89,7 +165,13 @@ export default function FavouritePage() {
 
         <div className="flex items-center gap-4 mb-14">
 
-          <Heart className="text-[#D9FF3F]" size={35} />
+          <Heart
+
+            className="text-[#D9FF3F]"
+
+            size={35}
+
+          />
 
           <h1 className="text-5xl font-bold text-white">
 
@@ -99,107 +181,150 @@ export default function FavouritePage() {
 
         </div>
 
-        {favourites.length === 0 ? (
+        {
 
-          <div className="text-center py-20">
+          favourites.length === 0 ? (
 
-            <h2 className="text-white text-3xl font-bold">
+            <div className="text-center py-20">
 
-              No Favourite Classes Yet
+              <h2 className="text-white text-3xl font-bold">
 
-            </h2>
+                No Favourite Classes Yet
 
-            <p className="text-gray-400 mt-4">
+              </h2>
 
-              Start adding your favourite classes.
+              <p className="text-gray-400 mt-4">
 
-            </p>
+                Start adding your favourite classes.
 
-            <Link
-              href="/classes"
-              className="inline-block mt-8 px-8 py-4 rounded-full bg-[#D9FF3F] text-black font-bold"
-            >
+              </p>
 
-              Browse Classes
+              <Link
 
-            </Link>
+                href="/classes"
 
-          </div>
+                className="inline-block mt-8 px-8 py-4 rounded-full bg-[#D9FF3F] text-black font-bold"
 
-        ) : (
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            {favourites.map((item) => (
-
-              <div
-                key={item._id}
-                className="rounded-[30px] overflow-hidden border border-white/10 bg-white/[0.03]"
               >
 
-                <div className="relative h-[250px]">
+                Browse Classes
 
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                  />
+              </Link>
 
-                </div>
+            </div>
 
-                <div className="p-7">
+          ) : (
 
-                  <span className="text-[#D9FF3F] text-sm">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                    {item.category}
+              {
 
-                  </span>
+                favourites.map((item) => (
 
-                  <h2 className="text-white text-2xl font-bold mt-3">
+                  <div
 
-                    {item.title}
+                    key={item._id}
 
-                  </h2>
+                    className="rounded-[30px] overflow-hidden border border-white/10 bg-white/[0.03]"
 
-                  <p className="text-gray-400 mt-4">
+                  >
 
-                    {item.description}
+                    <div className="relative h-[250px]">
 
-                  </p>
+                      <Image
 
-                  <div className="flex justify-between items-center mt-8">
+                        src={item.image}
 
-                    <span className="text-[#D9FF3F] font-bold text-xl">
+                        alt={item.title}
 
-                      ${item.price}
+                        fill
 
-                    </span>
+                        className="object-cover"
 
-                    <Link
-                      href={`/classes/${item._id}`}
-                      className="px-5 py-3 rounded-full bg-[#D9FF3F] text-black font-semibold"
-                    >
+                      />
 
-                      View Details
+                    </div>
 
-                    </Link>
+                    <div className="p-7">
+
+                      <span className="text-[#D9FF3F] text-sm">
+
+                        {item.category}
+
+                      </span>
+
+                      <h2 className="text-white text-2xl font-bold mt-3">
+
+                        {item.title}
+
+                      </h2>
+
+                      <p className="text-gray-400 mt-4 line-clamp-3">
+
+                        {item.description}
+
+                      </p>
+
+                      <div className="flex justify-between items-center mt-8">
+
+                        <span className="text-[#D9FF3F] font-bold text-xl">
+
+                          ${item.price}
+
+                        </span>
+
+                        <div className="flex gap-3">
+
+                          <button
+
+                            onClick={() =>
+
+                              handleDeleteFavourite(item._id)
+
+                            }
+
+                            className="px-5 py-3 rounded-full border border-red-500 text-red-400 hover:bg-red-500 hover:text-white transition-all cursor-pointer"
+
+                          >
+
+                            Remove
+
+                          </button>
+
+                          <Link
+
+                            href={`/classes/${item._id}`}
+
+                            className="px-5 py-3 rounded-full bg-[#D9FF3F] text-black font-semibold"
+
+                          >
+
+                            View Details
+
+                          </Link>
+
+                        </div>
+
+                      </div>
+
+                    </div>
 
                   </div>
 
-                </div>
+                ))
 
-              </div>
+              }
 
-            ))}
+            </div>
 
-          </div>
+          )
 
-        )}
+        }
 
       </div>
 
     </section>
 
   );
+
 }
