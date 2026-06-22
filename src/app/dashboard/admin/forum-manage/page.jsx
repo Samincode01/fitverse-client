@@ -478,7 +478,7 @@ export default function ForumManage() {
                 setSelectedPost(null)
               }
 
-              className="absolute top-6 right-6 text-gray-400"
+              className="top-6 right-6 text-gray-400 cursor-pointer"
 
             >
 

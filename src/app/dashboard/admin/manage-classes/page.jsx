@@ -384,7 +384,7 @@ export default function ManageClasses() {
                   setSelectedClass(null)
                 }
 
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-white cursor-pointer"
 
               >
 
