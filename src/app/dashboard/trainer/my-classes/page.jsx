@@ -135,7 +135,57 @@ const handleViewStudents = async (item) => {
     });
 
   };
+const handleImageUpload = async (e) => {
 
+  const image = e.target.files[0];
+
+  if (!image) return;
+
+  const imageData = new FormData();
+
+  imageData.append("image", image);
+
+  try {
+
+    const res = await fetch(
+
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+
+      {
+
+        method: "POST",
+
+        body: imageData,
+
+      }
+
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+
+      setFormData({
+
+        ...formData,
+
+        image: data.data.url,
+
+      });
+
+      toast.success("Image Uploaded");
+
+    }
+
+  }
+
+  catch {
+
+    toast.error("Image Upload Failed");
+
+  }
+
+};
 const handleUpdate = async (e) => {
 
  e.preventDefault();
@@ -510,21 +560,49 @@ const handleUpdate = async (e) => {
 
               />
 
-              <input
+ <div>
 
-                type="text"
+  <label className="block text-white mb-3">
 
-                name="image"
+    Upload New Image
 
-                value={formData.image}
+  </label>
 
-                onChange={handleChange}
+  <input
 
-                placeholder="Image URL"
+    type="file"
 
-                className="w-full px-5 py-4 rounded-2xl bg-[#111122] border border-white/10 text-white"
+    accept="image/*"
 
-              />
+    onChange={handleImageUpload}
+
+    className="w-full px-5 py-4 rounded-2xl bg-[#111122] border border-white/10 text-white"
+
+  />
+
+  {
+
+    formData.image && (
+
+      <div className="mt-4">
+
+        <img
+
+          src={formData.image}
+
+          alt="Preview"
+
+          className="w-40 h-28 rounded-2xl object-cover border border-white/10"
+
+        />
+
+      </div>
+
+    )
+
+  }
+
+</div>
 
               <div className="grid md:grid-cols-2 gap-5">
 

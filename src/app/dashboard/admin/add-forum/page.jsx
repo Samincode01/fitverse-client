@@ -33,6 +33,57 @@ export default function AddForum() {
     });
 
   };
+const handleImageUpload = async (e) => {
+
+  const image = e.target.files[0];
+
+  if (!image) return;
+
+  const formDataImg = new FormData();
+
+  formDataImg.append("image", image);
+
+  try {
+
+    const res = await fetch(
+
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+
+      {
+
+        method: "POST",
+
+        body: formDataImg,
+
+      }
+
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+
+      setFormData({
+
+        ...formData,
+
+        image: data.data.url,
+
+      });
+
+      toast.success("Image Uploaded");
+
+    }
+
+  }
+
+  catch {
+
+    toast.error("Image Upload Failed");
+
+  }
+
+};
 
   const handleSubmit = async (e) => {
 
@@ -174,23 +225,35 @@ export default function AddForum() {
 
             />
 
-            <input
+           <div>
 
-              type="text"
+  <input
 
-              name="image"
+    type="file"
 
-              required
+    accept="image/*"
 
-              value={formData.image}
+    onChange={handleImageUpload}
 
-              onChange={handleChange}
+    className="w-full px-5 py-4 rounded-2xl bg-[#111122] border border-white/10 text-white"
 
-              placeholder="Image URL"
+  />
 
-              className="w-full px-5 py-4 rounded-2xl bg-[#111122] border border-white/10 text-white"
+  {
 
-            />
+    formData.image && (
+
+      <p className="text-green-400 text-sm mt-2">
+
+        Image Uploaded Successfully
+
+      </p>
+
+    )
+
+  }
+
+</div>
 
             <textarea
 

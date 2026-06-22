@@ -33,38 +33,90 @@ export default function AddForum() {
     });
 
   };
+const handleImageUpload = async (e) => {
 
+  const image = e.target.files[0];
+
+  if (!image) return;
+
+  const imageData = new FormData();
+
+  imageData.append("image", image);
+
+  try {
+
+    const res = await fetch(
+
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+
+      {
+
+        method: "POST",
+
+        body: imageData,
+
+      }
+
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+
+      setFormData({
+
+        ...formData,
+
+        image: data.data.url,
+
+      });
+
+      toast.success("Image Uploaded");
+
+    }
+
+  }
+
+  catch {
+
+    toast.error("Image Upload Failed");
+
+  }
+
+};
   const handleSubmit = async (e) => {
 
     e.preventDefault();
 
     setLoading(true);
 
-    const forumData = {
+   const forumData = {
 
-      title: formData.title,
+  title: formData.title,
 
-      image: formData.image,
+  image: formData.image,
 
-      description: formData.description,
+  description: formData.description,
 
-      author: user?.name,
+  author: user?.name,
 
-      authorEmail: user?.email,
+  authorEmail: user?.email,
 
-      authorImage: user?.image,
+  authorImage: user?.image,
 
-      role: user?.role,
+  role: user?.role,
 
-      likes: 0,
+  status: "pending", // important
 
-      dislikes: 0,
+  likes: 0,
 
-      comments: [],
+  dislikes: 0,
 
-      createdAt: new Date(),
+  comments: [],
 
-    };
+  createdAt: new Date(),
+
+};
 
     try {
 
@@ -174,33 +226,55 @@ export default function AddForum() {
 
             </div>
 
-            <div>
+<div>
 
-              <label className="block text-white mb-3">
+  <label className="block text-white mb-3">
 
-                Image URL
+    Upload Forum Image
 
-              </label>
+  </label>
 
-              <input
+  <input
 
-                type="text"
+    type="file"
 
-                required
+    accept="image/*"
 
-                name="image"
+    onChange={handleImageUpload}
 
-                value={formData.image}
+    className="w-full px-5 py-4 rounded-2xl bg-[#111122] border border-white/10 text-white"
 
-                onChange={handleChange}
+  />
 
-                placeholder="Paste image url"
+  {
 
-                className="w-full px-5 py-4 rounded-2xl bg-[#111122] border border-white/10 text-white outline-none focus:border-[#D9FF3F]"
+    formData.image && (
 
-              />
+      <div className="mt-4">
 
-            </div>
+        <img
+
+          src={formData.image}
+
+          alt="Preview"
+
+          className="w-32 h-32 object-cover rounded-2xl border border-white/10"
+
+        />
+
+        <p className="text-green-400 text-sm mt-2">
+
+          Image uploaded successfully
+
+        </p>
+
+      </div>
+
+    )
+
+  }
+
+</div>
 
             <div>
 

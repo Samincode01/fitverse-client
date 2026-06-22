@@ -43,6 +43,57 @@ export default function AddClass() {
     });
 
   };
+const handleImageUpload = async (e) => {
+
+  const image = e.target.files[0];
+
+  if (!image) return;
+
+  const imageData = new FormData();
+
+  imageData.append("image", image);
+
+  try {
+
+    const res = await fetch(
+
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+
+      {
+
+        method: "POST",
+
+        body: imageData,
+
+      }
+
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+
+      setFormData({
+
+        ...formData,
+
+        image: data.data.url,
+
+      });
+
+      toast.success("Image Uploaded");
+
+    }
+
+  }
+
+  catch {
+
+    toast.error("Image Upload Failed");
+
+  }
+
+};
 
   const handleSubmit = async (e) => {
 
@@ -190,33 +241,55 @@ export default function AddClass() {
 
             </div>
 
-            <div>
+<div>
 
-              <label className="block text-white mb-3">
+  <label className="block text-white mb-3">
 
-                Image URL
+    Upload Class Image
 
-              </label>
+  </label>
 
-              <input
+  <input
 
-                type="text"
+    type="file"
 
-                name="image"
+    accept="image/*"
 
-                required
+    onChange={handleImageUpload}
 
-                value={formData.image}
+    className="w-full px-5 py-4 rounded-2xl bg-[#111122] border border-white/10 text-white"
 
-                onChange={handleChange}
+  />
 
-                placeholder="https://..."
+  {
 
-                className="w-full px-5 py-4 rounded-2xl bg-[#111122] border border-white/10 text-white outline-none focus:border-[#D9FF3F]"
+    formData.image && (
 
-              />
+      <div className="mt-4">
 
-            </div>
+        <img
+
+          src={formData.image}
+
+          alt="Preview"
+
+          className="w-36 h-24 rounded-2xl object-cover border border-white/10"
+
+        />
+
+        <p className="text-green-400 text-sm mt-2">
+
+          Image uploaded successfully
+
+        </p>
+
+      </div>
+
+    )
+
+  }
+
+</div>
 
           </div>
 
