@@ -5,7 +5,7 @@ async function getFeaturedClasses() {
 
   const res = await fetch(
 
-    "http://localhost:5000/classes?page=1&limit=4",
+    "http://localhost:5000/classes?page=1&limit=50",
 
     {
 
@@ -23,7 +23,11 @@ async function getFeaturedClasses() {
 
   const data = await res.json();
 
-  return data.classes;
+  return data.classes
+
+    .sort((a, b) => b.students - a.students)
+
+    .slice(0, 4);
 
 }
 

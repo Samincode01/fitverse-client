@@ -31,7 +31,7 @@ export default function ClassCard({
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
 
-        <div className="absolute top-5 left-5 px-4 py-2 rounded-full bg-pink-500/20 text-pink-300 text-sm font-semibold">
+        <div className="absolute top-5 left-5 px-4 py-2 rounded-full bg-pink-500/50 text-white text-sm font-semibold">
           {category}
         </div>
 
