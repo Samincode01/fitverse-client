@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -44,7 +45,20 @@ export default function RegisterPage() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#])[A-Za-z\d@$!%*?&.#]{8,}$/;
 
+if (!passwordRegex.test(password)) {
+  toast.error(
+    "Password must be at least 8 characters and include uppercase, lowercase, number and special character."
+  );
+  return;
+}
+
+if (password !== confirmPassword) {
+  toast.error("Passwords do not match");
+  return;
+}
     try {
       setLoading(true);
 
@@ -83,6 +97,7 @@ export default function RegisterPage() {
       setName("");
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
       setImage(null);
 
       setTimeout(() => {
@@ -272,7 +287,28 @@ const handleGoogleSignin = async() =>
               />
 
             </div>
+<div>
 
+  <label className="text-gray-300 mb-3 block">
+    Confirm Password
+  </label>
+
+  <div className="flex items-center gap-3 px-5 h-14 rounded-2xl border border-white/10 bg-white/[0.03]">
+
+    <Lock className="text-[#D9FF3F]" size={20} />
+
+    <input
+      type="password"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+      placeholder="Confirm password"
+      required
+      className="flex-1 bg-transparent outline-none text-white placeholder:text-gray-500"
+    />
+
+  </div>
+
+</div>
           </div>
 
           {/* Submit */}
