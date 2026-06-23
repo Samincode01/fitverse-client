@@ -53,7 +53,10 @@ export default function UserDashboard() {
           setApplication(trainerData || null);
 
         }
-
+ console.log("SESSION:", session);
+  console.log("USER:", user);
+  console.log("USER ID:", user?.id);
+  console.log("USER EMAIL:", user?.email);
         // Favourites
 
         const favRes = await fetch(
