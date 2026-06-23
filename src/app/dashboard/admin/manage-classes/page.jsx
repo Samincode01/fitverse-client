@@ -368,7 +368,7 @@ export default function ManageClasses() {
 
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
-          <div className="w-[650px] bg-[#0A0A18] rounded-[35px] border border-white/10 p-8">
+          <div className="w-[520px] max-w-[95vw] bg-[#0A0A18] rounded-[35px] border border-white/10 p-8">
 
             <div className="flex justify-between items-center mb-8">
 
@@ -394,7 +394,7 @@ export default function ManageClasses() {
 
             </div>
 
-            <div className="relative h-[250px] rounded-3xl overflow-hidden">
+            <div className="relative h-[180px] rounded-3xl overflow-hidden">
 
               <Image
 
@@ -412,7 +412,7 @@ export default function ManageClasses() {
 
             <div className="mt-8 space-y-5">
 
-              <h1 className="text-4xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-white">
 
                 {selectedClass.title}
 
@@ -426,15 +426,15 @@ export default function ManageClasses() {
 
               <div className="grid grid-cols-2 gap-5">
 
-                <div className="bg-[#111122] p-5 rounded-2xl">
+                <div className="bg-[#111122] p-3 rounded-xl">
 
-                  <p className="text-gray-400">
+                  <p className="text-xs text-gray-400">
 
                     Category
 
                   </p>
 
-                  <h3 className="text-white">
+                  <h3 className="text-sm text-white font-semibold">
 
                     {selectedClass.category}
 
@@ -494,7 +494,7 @@ export default function ManageClasses() {
 
               {selectedClass.status === "pending" && (
 
-                <div className="flex gap-5 mt-8">
+                <div className="flex gap-3 mt-6">
 
                   <button
 
@@ -504,7 +504,7 @@ export default function ManageClasses() {
                       )
                     }
 
-                    className="flex-1 py-4 rounded-2xl bg-green-500 text-white font-bold cursor-pointer"
+                    className="flex-1 py-2.5 rounded-xl bg-green-500 text-white font-semibold text-sm cursor-pointer"
 
                   >
 
@@ -520,7 +520,7 @@ export default function ManageClasses() {
                       )
                     }
 
-                    className="flex-1 py-4 rounded-2xl bg-red-500 text-white font-bold cursor-pointer"
+                    className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-semibold text-sm cursor-pointer"
 
                   >
 
