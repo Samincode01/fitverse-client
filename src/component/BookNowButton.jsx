@@ -39,7 +39,7 @@ export default function BookNowButton({
 
         const res = await fetch(
 
-          `http://localhost:5000/bookings/check?email=${user.email}&classId=${classId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/bookings/check?email=${user.email}&classId=${classId}`
 
         );
 
@@ -77,7 +77,7 @@ export default function BookNowButton({
 
       const userRes = await fetch(
 
-        `http://localhost:5000/users/${user.email}`
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${user.email}`
 
       );
 

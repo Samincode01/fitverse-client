@@ -47,7 +47,7 @@ export default function CommentSection({
 
       const res = await fetch(
 
-        `http://localhost:5000/forums/comment/${forumId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/forums/comment/${forumId}`,
 
         {
 
@@ -101,7 +101,7 @@ if (data.modifiedCount > 0) {
 
       const res = await fetch(
 
-        `http://localhost:5000/forums/comment/edit/${forumId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/forums/comment/edit/${forumId}`,
 
         {
 
@@ -167,7 +167,7 @@ if (data.modifiedCount > 0) {
 
       const res = await fetch(
 
-        `http://localhost:5000/forums/comment/delete/${forumId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/forums/comment/delete/${forumId}`,
 
         {
 

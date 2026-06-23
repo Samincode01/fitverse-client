@@ -29,7 +29,7 @@ export default function ApplyTrainer() {
 
     setLoading(true);
 
-    fetch(`http://localhost:5000/trainer-applications/${user.email}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/trainer-applications/${user.email}`)
 
       .then((res) => res.json())
 
@@ -78,7 +78,7 @@ export default function ApplyTrainer() {
     try {
 
       const res = await fetch(
-        "http://localhost:5000/trainer-applications",
+        `${process.env.NEXT_PUBLIC_API_URL}/trainer-applications`,
         {
 
           method: "POST",

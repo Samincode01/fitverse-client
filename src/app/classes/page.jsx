@@ -41,7 +41,7 @@ export default function ClassesPage() {
 
     fetch(
 
-      `http://localhost:5000/classes?page=${page}&limit=6&search=${search}&category=${category}`
+      `${process.env.NEXT_PUBLIC_API_URL}/classes?page=${page}&limit=6&search=${search}&category=${category}`
 
     )
 

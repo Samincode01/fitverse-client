@@ -19,7 +19,7 @@ export default function ManageTrainers() {
       try {
 
         const res = await fetch(
-          "http://localhost:5000/trainers"
+          `${process.env.NEXT_PUBLIC_API_URL}/trainers`
         );
 
         const data = await res.json();
@@ -78,7 +78,7 @@ export default function ManageTrainers() {
 
       const res = await fetch(
 
-        `http://localhost:5000/trainers/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/trainers/${id}`,
 
         {
 

@@ -33,7 +33,7 @@ export default function FavouritePage() {
 
         const favRes = await fetch(
 
-          `http://localhost:5000/favourites/${userId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/favourites/${userId}`
 
         );
 
@@ -43,7 +43,7 @@ export default function FavouritePage() {
 
           const res = await fetch(
 
-            `http://localhost:5000/classes/${item.classId}`
+            `${process.env.NEXT_PUBLIC_API_URL}/classes/${item.classId}`
 
           );
 

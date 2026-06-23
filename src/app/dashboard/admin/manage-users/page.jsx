@@ -13,7 +13,7 @@ export default function ManageUsers() {
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/users")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`)
 
       .then(res => res.json())
 
@@ -81,7 +81,7 @@ export default function ManageUsers() {
 
     const res = await fetch(
 
-      `http://localhost:5000/users/make-admin/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/make-admin/${id}`,
 
       {
 
@@ -133,7 +133,7 @@ export default function ManageUsers() {
 
     const res = await fetch(
 
-      `http://localhost:5000/users/demote-admin/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/demote-admin/${id}`,
 
       {
 
@@ -185,7 +185,7 @@ export default function ManageUsers() {
 
     const res = await fetch(
 
-      `http://localhost:5000/users/block/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/block/${id}`,
 
       {
 
@@ -217,7 +217,7 @@ export default function ManageUsers() {
 
     const res = await fetch(
 
-      `http://localhost:5000/users/unblock/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/unblock/${id}`,
 
       {
 

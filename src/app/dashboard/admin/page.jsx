@@ -73,11 +73,11 @@ useEffect(() => {
 
 ] = await Promise.all([
 
-  fetch("http://localhost:5000/users"),
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`),
 
-  fetch("http://localhost:5000/classes"),
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes`),
 
-  fetch("http://localhost:5000/bookings-count"),
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings-count`),
 
 ]);
 

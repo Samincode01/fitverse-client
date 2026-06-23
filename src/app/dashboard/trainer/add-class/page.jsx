@@ -123,7 +123,7 @@ const handleImageUpload = async (e) => {
 
     try {
 
-      const res = await fetch("http://localhost:5000/classes", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes`, {
 
         method: "POST",
 

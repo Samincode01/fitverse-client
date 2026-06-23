@@ -48,7 +48,7 @@ export default function MyClasses() {
 
     if (!user?.email) return;
 
-    fetch(`http://localhost:5000/trainer-classes/${user.email}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/trainer-classes/${user.email}`)
 
       .then((res) => res.json())
 
@@ -103,7 +103,7 @@ const handleViewStudents = async (item) => {
 
     const res = await fetch(
 
-      `http://localhost:5000/class-students/${item._id}`
+      `${process.env.NEXT_PUBLIC_API_URL}/class-students/${item._id}`
 
     );
 
@@ -194,7 +194,7 @@ const handleUpdate = async (e) => {
 
   const res = await fetch(
 
-    `http://localhost:5000/classes/${selectedClass._id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/classes/${selectedClass._id}`,
 
     {
 
@@ -258,7 +258,7 @@ const handleUpdate = async (e) => {
 
     const res = await fetch(
 
-      `http://localhost:5000/classes/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/classes/${id}`,
 
       {
 

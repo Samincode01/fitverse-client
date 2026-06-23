@@ -15,7 +15,7 @@ export default function ManageClasses() {
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/classes/all")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/all`)
 
       .then((res) => res.json())
 
@@ -41,7 +41,7 @@ export default function ManageClasses() {
 
     await fetch(
 
-      `http://localhost:5000/classes/approve/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/classes/approve/${id}`,
 
       {
 
@@ -70,7 +70,7 @@ export default function ManageClasses() {
 
     await fetch(
 
-      `http://localhost:5000/classes/reject/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/classes/reject/${id}`,
 
       {
 
@@ -100,7 +100,7 @@ export default function ManageClasses() {
 
     await fetch(
 
-      `http://localhost:5000/classes/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/classes/${id}`,
 
       {
 

@@ -72,7 +72,7 @@ export default function TrainerDashboard() {
 
         const res = await fetch(
 
-          `http://localhost:5000/trainer-stats/${user.email}`
+          `${process.env.NEXT_PUBLIC_API_URL}/trainer-stats/${user.email}`
 
         );
 

@@ -22,7 +22,7 @@ export default function MyForums() {
 
     fetch(
 
-      `http://localhost:5000/my-forums/${user.email}`
+      `${process.env.NEXT_PUBLIC_API_URL}/my-forums/${user.email}`
 
     )
 
@@ -62,7 +62,7 @@ export default function MyForums() {
 
     const res = await fetch(
 
-      `http://localhost:5000/forums/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/forums/${id}`,
 
       {
 

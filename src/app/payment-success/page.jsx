@@ -35,7 +35,7 @@ export default function PaymentSuccess() {
 
         const classRes = await fetch(
 
-          `http://localhost:5000/classes/${classId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/classes/${classId}`
 
         );
 
@@ -73,7 +73,7 @@ export default function PaymentSuccess() {
 
         const res = await fetch(
 
-          "http://localhost:5000/bookings",
+          `${process.env.NEXT_PUBLIC_API_URL}/bookings`,
 
           {
 

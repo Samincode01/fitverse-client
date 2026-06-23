@@ -21,7 +21,7 @@ export default function MyBookings() {
 
     fetch(
 
-      `http://localhost:5000/bookings/${user.email}`
+      `${process.env.NEXT_PUBLIC_API_URL}/bookings/${user.email}`
 
     )
 

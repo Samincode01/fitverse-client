@@ -18,7 +18,7 @@ export default function AppliedTrainers() {
   const [selectedTrainer, setSelectedTrainer] = useState(null);
   useEffect(() => {
 
-    fetch("http://localhost:5000/trainer-applications")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/trainer-applications`)
       .then((res) => res.json())
       .then((data) => {
 
@@ -40,7 +40,7 @@ export default function AppliedTrainers() {
  const handleApprove = async (id) => {
 
   await fetch(
-    `http://localhost:5000/trainer-applications/approve/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/trainer-applications/approve/${id}`,
     {
       method: "PATCH",
     }
@@ -71,7 +71,7 @@ export default function AppliedTrainers() {
 
     const res = await fetch(
 
-      `http://localhost:5000/trainer-applications/reject/${selectedId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/trainer-applications/reject/${selectedId}`,
 
       {
 

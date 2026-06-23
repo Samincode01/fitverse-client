@@ -23,7 +23,7 @@ const user = session?.user || session?.data?.user;
 
       const res = await fetch(
 
-        `http://localhost:5000/favourites/${user.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/favourites/${user.id}`
 
       );
 
@@ -69,7 +69,7 @@ const user = session?.user || session?.data?.user;
 
       const response = await fetch(
 
-        "http://localhost:5000/favourites",
+        `${process.env.NEXT_PUBLIC_API_URL}/favourites`,
 
         {
 

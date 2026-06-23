@@ -21,7 +21,7 @@ export default function ForumManage() {
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/forums/all")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/forums/all`)
 
       .then((res) => res.json())
 
@@ -47,7 +47,7 @@ export default function ForumManage() {
 
     const res = await fetch(
 
-      `http://localhost:5000/forums/approve/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/forums/approve/${id}`,
 
       {
 
@@ -91,7 +91,7 @@ export default function ForumManage() {
 
     const res = await fetch(
 
-      `http://localhost:5000/forums/reject/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/forums/reject/${id}`,
 
       {
 
@@ -143,7 +143,7 @@ export default function ForumManage() {
 
     const res = await fetch(
 
-      `http://localhost:5000/forums/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/forums/${id}`,
 
       {
 

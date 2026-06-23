@@ -42,7 +42,7 @@ export default function UserDashboard() {
 
         const trainerRes = await fetch(
 
-          `http://localhost:5000/trainer-applications/${user.email}`
+          `${process.env.NEXT_PUBLIC_API_URL}/trainer-applications/${user.email}`
 
         );
 
@@ -58,7 +58,7 @@ export default function UserDashboard() {
 
         const favRes = await fetch(
 
-          `http://localhost:5000/favourites/${user.id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/favourites/${user.id}`
 
         );
 
@@ -82,7 +82,7 @@ export default function UserDashboard() {
 
         const bookingRes = await fetch(
 
-          `http://localhost:5000/bookings/${user.email}`
+          `${process.env.NEXT_PUBLIC_API_URL}/bookings/${user.email}`
 
         );
 

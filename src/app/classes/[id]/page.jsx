@@ -20,7 +20,7 @@ async function getClass(id) {
   try {
 
     const res = await fetch(
-      `http://localhost:5000/classes/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/classes/${id}`,
       {
         cache: "no-store",
       }

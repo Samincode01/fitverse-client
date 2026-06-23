@@ -12,7 +12,7 @@ export default function TransactionsPage() {
 
   useEffect(() => {
 
-    fetch("http://localhost:5000/transactions")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions`)
 
       .then((res) => res.json())
 

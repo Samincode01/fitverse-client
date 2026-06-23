@@ -36,7 +36,7 @@ export default function ForumActions({
 
     const res = await fetch(
 
-      `http://localhost:5000/forums/like/${forumId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/forums/like/${forumId}`,
 
       {
 
@@ -86,7 +86,7 @@ export default function ForumActions({
 
     const res = await fetch(
 
-      `http://localhost:5000/forums/dislike/${forumId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/forums/dislike/${forumId}`,
 
       {
 

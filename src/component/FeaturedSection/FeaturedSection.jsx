@@ -5,7 +5,7 @@ async function getFeaturedClasses() {
 
   const res = await fetch(
 
-    "http://localhost:5000/classes?page=1&limit=50",
+    `${process.env.NEXT_PUBLIC_API_URL}/classes?page=1&limit=50`,
 
     {
 
